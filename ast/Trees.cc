@@ -206,6 +206,48 @@ string TreePtr::nodeName() const {
 #undef NODE_NAME
 }
 
+string TreePtr::showRaw(const core::GlobalState &gs, int tabs) {
+    auto *ptr = get();
+
+    ENFORCE(ptr != nullptr);
+
+#define SHOW_RAW(name) \
+    case Tag::name:    \
+        return reinterpret_cast<name *>(ptr)->showRaw(gs, tabs);
+    switch (tag()) {
+        SHOW_RAW(EmptyTree)
+        SHOW_RAW(Send)
+        SHOW_RAW(ClassDef)
+        SHOW_RAW(MethodDef)
+        SHOW_RAW(If)
+        SHOW_RAW(While)
+        SHOW_RAW(Break)
+        SHOW_RAW(Retry)
+        SHOW_RAW(Next)
+        SHOW_RAW(Return)
+        SHOW_RAW(RescueCase)
+        SHOW_RAW(Rescue)
+        SHOW_RAW(Local)
+        SHOW_RAW(UnresolvedIdent)
+        SHOW_RAW(RestArg)
+        SHOW_RAW(KeywordArg)
+        SHOW_RAW(OptionalArg)
+        SHOW_RAW(BlockArg)
+        SHOW_RAW(ShadowArg)
+        SHOW_RAW(Assign)
+        SHOW_RAW(Cast)
+        SHOW_RAW(Hash)
+        SHOW_RAW(Array)
+        SHOW_RAW(Literal)
+        SHOW_RAW(UnresolvedConstantLit)
+        SHOW_RAW(ConstantLit)
+        SHOW_RAW(ZSuperArgs)
+        SHOW_RAW(Block)
+        SHOW_RAW(InsSeq)
+    }
+#undef SHOW_RAW
+}
+
 bool TreePtr::isSelfReference() const {
     if (auto *local = cast_tree_const<Local>(*this)) {
         return local->localVariable == core::LocalVariable::selfVariable();
@@ -540,7 +582,7 @@ string ClassDef::showRaw(const core::GlobalState &gs, int tabs) {
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "kind = {}\n", kind == ClassDef::Kind::Module ? "module" : "class");
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "name = {}<{}>\n", name->showRaw(gs, tabs + 1),
+    fmt::format_to(buf, "name = {}<{}>\n", name.showRaw(gs, tabs + 1),
                    this->symbol.dataAllowingNone(gs)->name.data(gs)->showRaw(gs));
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "ancestors = [");
@@ -550,7 +592,7 @@ string ClassDef::showRaw(const core::GlobalState &gs, int tabs) {
             fmt::format_to(buf, ", ");
         }
         first = false;
-        fmt::format_to(buf, "{}", a->showRaw(gs, tabs + 2));
+        fmt::format_to(buf, "{}", a.showRaw(gs, tabs + 2));
     }
     fmt::format_to(buf, "]\n");
 
@@ -559,7 +601,7 @@ string ClassDef::showRaw(const core::GlobalState &gs, int tabs) {
 
     for (auto &a : this->rhs) {
         printTabs(buf, tabs + 2);
-        fmt::format_to(buf, "{}\n", a->showRaw(gs, tabs + 2));
+        fmt::format_to(buf, "{}\n", a.showRaw(gs, tabs + 2));
         if (&a != &this->rhs.back()) {
             fmt::format_to(buf, "{}", '\n');
         }
@@ -593,13 +635,13 @@ string InsSeq::showRaw(const core::GlobalState &gs, int tabs) {
     fmt::format_to(buf, "stats = [\n");
     for (auto &a : this->stats) {
         printTabs(buf, tabs + 2);
-        fmt::format_to(buf, "{}\n", a->showRaw(gs, tabs + 2));
+        fmt::format_to(buf, "{}\n", a.showRaw(gs, tabs + 2));
     }
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "],\n");
 
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "expr = {}\n", expr->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "expr = {}\n", expr.showRaw(gs, tabs + 1));
     printTabs(buf, tabs);
     fmt::format_to(buf, "}}");
     return fmt::to_string(buf);
@@ -671,7 +713,7 @@ string MethodDef::showRaw(const core::GlobalState &gs, int tabs) {
                 fmt::format_to(buf, ", ");
             }
             first = false;
-            fmt::format_to(buf, "{}", a->showRaw(gs, tabs + 2));
+            fmt::format_to(buf, "{}", a.showRaw(gs, tabs + 2));
         }
     } else {
         for (auto &a : this->args) {
@@ -679,12 +721,12 @@ string MethodDef::showRaw(const core::GlobalState &gs, int tabs) {
                 fmt::format_to(buf, ", ");
             }
             first = false;
-            fmt::format_to(buf, "{}", a->showRaw(gs, tabs + 2));
+            fmt::format_to(buf, "{}", a.showRaw(gs, tabs + 2));
         }
     }
     fmt::format_to(buf, "]\n");
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "rhs = {}\n", this->rhs->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "rhs = {}\n", this->rhs.showRaw(gs, tabs + 1));
     printTabs(buf, tabs);
     fmt::format_to(buf, "}}");
     return fmt::to_string(buf);
@@ -710,11 +752,11 @@ string If::showRaw(const core::GlobalState &gs, int tabs) {
 
     fmt::format_to(buf, "{}{{\n", nodeName());
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "cond = {}\n", this->cond->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "cond = {}\n", this->cond.showRaw(gs, tabs + 1));
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "thenp = {}\n", this->thenp->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "thenp = {}\n", this->thenp.showRaw(gs, tabs + 1));
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "elsep = {}\n", this->elsep->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "elsep = {}\n", this->elsep.showRaw(gs, tabs + 1));
     printTabs(buf, tabs);
     fmt::format_to(buf, "}}");
     return fmt::to_string(buf);
@@ -725,9 +767,9 @@ string Assign::showRaw(const core::GlobalState &gs, int tabs) {
 
     fmt::format_to(buf, "{}{{\n", nodeName());
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "lhs = {}\n", this->lhs->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "lhs = {}\n", this->lhs.showRaw(gs, tabs + 1));
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "rhs = {}\n", this->rhs->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "rhs = {}\n", this->rhs.showRaw(gs, tabs + 1));
     printTabs(buf, tabs);
     fmt::format_to(buf, "}}");
     return fmt::to_string(buf);
@@ -749,9 +791,9 @@ string While::showRaw(const core::GlobalState &gs, int tabs) {
 
     fmt::format_to(buf, "{}{{\n", nodeName());
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "cond = {}\n", this->cond->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "cond = {}\n", this->cond.showRaw(gs, tabs + 1));
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "body = {}\n", this->body->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "body = {}\n", this->body.showRaw(gs, tabs + 1));
     printTabs(buf, tabs);
     fmt::format_to(buf, "}}");
     return fmt::to_string(buf);
@@ -770,7 +812,7 @@ string UnresolvedConstantLit::showRaw(const core::GlobalState &gs, int tabs) {
 
     fmt::format_to(buf, "{}{{\n", nodeName());
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "scope = {}\n", this->scope->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "scope = {}\n", this->scope.showRaw(gs, tabs + 1));
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "cnst = {}\n", this->cnst.data(gs)->showRaw(gs));
     printTabs(buf, tabs);
@@ -790,7 +832,7 @@ string ConstantLit::showRaw(const core::GlobalState &gs, int tabs) {
 
     fmt::format_to(buf, "{}{{\n", nodeName());
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "orig = {}\n", this->original ? this->original->showRaw(gs, tabs + 1) : "nullptr");
+    fmt::format_to(buf, "orig = {}\n", this->original ? this->original.showRaw(gs, tabs + 1) : "nullptr");
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "symbol = {}\n", this->symbol.dataAllowingNone(gs)->showFullName(gs));
     if (!resolutionScopes.empty()) {
@@ -856,15 +898,15 @@ string UnresolvedIdent::showRaw(const core::GlobalState &gs, int tabs) {
 }
 
 string Return::showRaw(const core::GlobalState &gs, int tabs) {
-    return nodeName() + "{ expr = " + this->expr->showRaw(gs, tabs + 1) + " }";
+    return nodeName() + "{ expr = " + this->expr.showRaw(gs, tabs + 1) + " }";
 }
 
 string Next::showRaw(const core::GlobalState &gs, int tabs) {
-    return nodeName() + "{ expr = " + this->expr->showRaw(gs, tabs + 1) + " }";
+    return nodeName() + "{ expr = " + this->expr.showRaw(gs, tabs + 1) + " }";
 }
 
 string Break::showRaw(const core::GlobalState &gs, int tabs) {
-    return nodeName() + "{ expr = " + this->expr->showRaw(gs, tabs + 1) + " }";
+    return nodeName() + "{ expr = " + this->expr.showRaw(gs, tabs + 1) + " }";
 }
 
 string Retry::showRaw(const core::GlobalState &gs, int tabs) {
@@ -940,14 +982,14 @@ string RescueCase::showRaw(const core::GlobalState &gs, int tabs) {
     fmt::format_to(buf, "exceptions = [\n");
     for (auto &a : exceptions) {
         printTabs(buf, tabs + 2);
-        fmt::format_to(buf, "{}\n", a->showRaw(gs, tabs + 2));
+        fmt::format_to(buf, "{}\n", a.showRaw(gs, tabs + 2));
     }
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "]\n");
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "var = {}\n", this->var->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "var = {}\n", this->var.showRaw(gs, tabs + 1));
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "body = {}\n", this->body->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "body = {}\n", this->body.showRaw(gs, tabs + 1));
     printTabs(buf, tabs);
     fmt::format_to(buf, "}}");
     return fmt::to_string(buf);
@@ -982,19 +1024,19 @@ string Rescue::showRaw(const core::GlobalState &gs, int tabs) {
     fmt::memory_buffer buf;
     fmt::format_to(buf, "{}{{\n", nodeName());
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "body = {}\n", this->body->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "body = {}\n", this->body.showRaw(gs, tabs + 1));
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "rescueCases = [\n");
     for (auto &a : rescueCases) {
         printTabs(buf, tabs + 2);
-        fmt::format_to(buf, "{}\n", a->showRaw(gs, tabs + 2));
+        fmt::format_to(buf, "{}\n", a.showRaw(gs, tabs + 2));
     }
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "]\n");
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "else = {}\n", this->else_->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "else = {}\n", this->else_.showRaw(gs, tabs + 1));
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "ensure = {}\n", this->ensure->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "ensure = {}\n", this->ensure.showRaw(gs, tabs + 1));
     printTabs(buf, tabs);
     fmt::format_to(buf, "}}");
     return fmt::to_string(buf);
@@ -1015,13 +1057,13 @@ string Send::showRaw(const core::GlobalState &gs, int tabs) {
     fmt::memory_buffer buf;
     fmt::format_to(buf, "{}{{\n", nodeName());
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "recv = {}\n", this->recv->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "recv = {}\n", this->recv.showRaw(gs, tabs + 1));
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "fun = {}\n", this->fun.data(gs)->showRaw(gs));
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "block = ");
     if (this->block) {
-        fmt::format_to(buf, "{}\n", this->block->showRaw(gs, tabs + 1));
+        fmt::format_to(buf, "{}\n", this->block.showRaw(gs, tabs + 1));
     } else {
         fmt::format_to(buf, "nullptr\n");
     }
@@ -1029,7 +1071,7 @@ string Send::showRaw(const core::GlobalState &gs, int tabs) {
     fmt::format_to(buf, "args = [\n");
     for (auto &a : args) {
         printTabs(buf, tabs + 2);
-        fmt::format_to(buf, "{}\n", a->showRaw(gs, tabs + 2));
+        fmt::format_to(buf, "{}\n", a.showRaw(gs, tabs + 2));
     }
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "]\n");
@@ -1053,7 +1095,7 @@ string Cast::showRaw(const core::GlobalState &gs, int tabs) {
     printTabs(buf, tabs + 2);
     fmt::format_to(buf, "cast = {},\n", this->cast.showRaw(gs));
     printTabs(buf, tabs + 2);
-    fmt::format_to(buf, "arg = {}\n", this->arg->showRaw(gs, tabs + 2));
+    fmt::format_to(buf, "arg = {}\n", this->arg.showRaw(gs, tabs + 2));
     printTabs(buf, tabs + 2);
     fmt::format_to(buf, "type = {},\n", this->type->toString(gs));
     printTabs(buf, tabs);
@@ -1079,9 +1121,9 @@ string Hash::showRaw(const core::GlobalState &gs, int tabs) {
         printTabs(buf, tabs + 2);
         fmt::format_to(buf, "[\n");
         printTabs(buf, tabs + 3);
-        fmt::format_to(buf, "key = {}\n", key->showRaw(gs, tabs + 3));
+        fmt::format_to(buf, "key = {}\n", key.showRaw(gs, tabs + 3));
         printTabs(buf, tabs + 3);
-        fmt::format_to(buf, "value = {}\n", value->showRaw(gs, tabs + 3));
+        fmt::format_to(buf, "value = {}\n", value.showRaw(gs, tabs + 3));
         printTabs(buf, tabs + 2);
         fmt::format_to(buf, "]\n");
     }
@@ -1100,7 +1142,7 @@ string Array::showRaw(const core::GlobalState &gs, int tabs) {
     fmt::format_to(buf, "elems = [\n");
     for (auto &a : elems) {
         printTabs(buf, tabs + 2);
-        fmt::format_to(buf, "{}\n", a->showRaw(gs, tabs + 2));
+        fmt::format_to(buf, "{}\n", a.showRaw(gs, tabs + 2));
     }
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "]\n");
@@ -1161,12 +1203,12 @@ string Block::showRaw(const core::GlobalState &gs, int tabs) {
     fmt::format_to(buf, "args = [\n");
     for (auto &a : this->args) {
         printTabs(buf, tabs + 2);
-        fmt::format_to(buf, "{}\n", a->showRaw(gs, tabs + 2));
+        fmt::format_to(buf, "{}\n", a.showRaw(gs, tabs + 2));
     }
     printTabs(buf, tabs + 1);
     fmt::format_to(buf, "]\n");
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "body = {}\n", this->body->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "body = {}\n", this->body.showRaw(gs, tabs + 1));
     printTabs(buf, tabs);
     fmt::format_to(buf, "}}");
     return fmt::to_string(buf);
@@ -1321,7 +1363,7 @@ string EmptyTree::showRaw(const core::GlobalState &gs, int tabs) {
 }
 
 string RestArg::showRaw(const core::GlobalState &gs, int tabs) {
-    return nodeName() + "{ expr = " + expr->showRaw(gs, tabs) + " }";
+    return nodeName() + "{ expr = " + expr.showRaw(gs, tabs) + " }";
 }
 
 string RestArg::nodeName() {
@@ -1329,7 +1371,7 @@ string RestArg::nodeName() {
 }
 
 string KeywordArg::showRaw(const core::GlobalState &gs, int tabs) {
-    return nodeName() + "{ expr = " + expr->showRaw(gs, tabs) + " }";
+    return nodeName() + "{ expr = " + expr.showRaw(gs, tabs) + " }";
 }
 
 string KeywordArg::nodeName() {
@@ -1340,10 +1382,10 @@ string OptionalArg::showRaw(const core::GlobalState &gs, int tabs) {
     fmt::memory_buffer buf;
     fmt::format_to(buf, "{}{{\n", nodeName());
     printTabs(buf, tabs + 1);
-    fmt::format_to(buf, "expr = {}\n", expr->showRaw(gs, tabs + 1));
+    fmt::format_to(buf, "expr = {}\n", expr.showRaw(gs, tabs + 1));
     if (default_) {
         printTabs(buf, tabs + 1);
-        fmt::format_to(buf, "default_ = {}\n", default_->showRaw(gs, tabs + 1));
+        fmt::format_to(buf, "default_ = {}\n", default_.showRaw(gs, tabs + 1));
     }
     printTabs(buf, tabs);
     fmt::format_to(buf, "}}");
@@ -1356,11 +1398,11 @@ string OptionalArg::nodeName() {
 }
 
 string ShadowArg::showRaw(const core::GlobalState &gs, int tabs) {
-    return nodeName() + "{ expr = " + expr->showRaw(gs, tabs) + " }";
+    return nodeName() + "{ expr = " + expr.showRaw(gs, tabs) + " }";
 }
 
 string BlockArg::showRaw(const core::GlobalState &gs, int tabs) {
-    return nodeName() + "{ expr = " + expr->showRaw(gs, tabs) + " }";
+    return nodeName() + "{ expr = " + expr.showRaw(gs, tabs) + " }";
 }
 
 string ShadowArg::nodeName() {
