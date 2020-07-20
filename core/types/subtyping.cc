@@ -77,36 +77,73 @@ TypePtr filterOrComponents(const TypePtr &originalType, const InlinedVector<Type
     }
 }
 
+using FlattenedOr = InlinedVector<TypePtr, 4>;
+
+/* TypePtr rebuildOr(FlattenedOr::iterator start, FlattenedOr::iterator end) { */
+/*     fmt::print("{}", end - start); */
+/*     return *start; */
+/* } */
+
 TypePtr lubDistributeOr(const GlobalState &gs, const TypePtr &t1, const TypePtr &t2) {
     InlinedVector<TypePtr, 4> originalOrComponents;
-    InlinedVector<Type *, 4> typesConsumed;
     auto *o1 = cast_type<OrType>(t1.get());
     ENFORCE(o1 != nullptr);
     fillInOrComponents(originalOrComponents, o1->left);
     fillInOrComponents(originalOrComponents, o1->right);
 
+    InlinedVector<TypePtr, 4> reducedOrComponents;
+    reducedOrComponents.reserve(originalOrComponents.size());
     for (auto &component : originalOrComponents) {
         auto lubbed = Types::any(gs, component, t2);
+
         if (lubbed.get() == component.get()) {
             categoryCounterInc("lubDistributeOr.outcome", "t1");
             return t1;
         }
+
         if (lubbed.get() == t2.get()) {
             categoryCounterInc("lubDistributeOr.outcome", "consumedComponent");
-            typesConsumed.emplace_back(component.get());
+            continue;
         }
+
+        // If a supertype of this type already exists in the reduced set, `lubbed` can be ignored
+        auto supertype =
+            absl::c_find_if(reducedOrComponents, [&](auto other) { return Types::isSubType(gs, lubbed, other); });
+        if (supertype != reducedOrComponents.end()) {
+            categoryCounterInc("lubDistributeOr.outcome", "supertype");
+            continue;
+        }
+
+        // remove all subtypes of `lubbed`, and add lubbed to the set
+        auto subtypesStart = remove_if(reducedOrComponents.begin(), reducedOrComponents.end(),
+                                       [&](auto other) { return Types::isSubType(gs, other, lubbed); });
+        if (subtypesStart != reducedOrComponents.end()) {
+            categoryCounterInc("lubDistributeOr.outcome", "subtype");
+            reducedOrComponents.erase(subtypesStart, reducedOrComponents.end());
+        }
+
+        reducedOrComponents.emplace_back(lubbed);
     }
-    if (typesConsumed.empty()) {
-        categoryCounterInc("lubDistributeOr.outcome", "worst");
-        return OrType::make_shared(t1, underlying(t2));
-    }
-    categoryCounterInc("lubDistributeOr.outcome", "consumedComponent");
-    // lub back everything except typesComsumed
-    auto remainingTypes = filterOrComponents(t1, typesConsumed);
-    if (remainingTypes == nullptr) {
+
+    // Everything on the left reduced
+    if (reducedOrComponents.empty()) {
         return t2;
     }
-    return OrType::make_shared(move(remainingTypes), underlying(t2));
+
+    if (reducedOrComponents.size() == originalOrComponents.size()) {
+        categoryCounterInc("lubDistributeOr.outcome", "worst");
+    }
+
+    // t2 is already present implicitly, as each element here is lubbed with it.
+    auto it = reducedOrComponents.begin();
+    auto result = *it;
+    ++it;
+    while (it != reducedOrComponents.end()) {
+        result = OrType::make_shared(result, *it);
+        ++it;
+    }
+
+    return result;
 }
 
 TypePtr glbDistributeAnd(const GlobalState &gs, const TypePtr &t1, const TypePtr &t2) {
