@@ -72,7 +72,7 @@ unique_ptr<cfg::CFG> Inference::run(core::Context ctx, unique_ptr<cfg::CFG> cfg)
     vector<Environment> outEnvironments;
     outEnvironments.reserve(cfg->maxBasicBlockId);
     for (int i = 0; i < cfg->maxBasicBlockId; i++) {
-        outEnvironments.emplace_back(methodLoc);
+        outEnvironments.emplace_back(*cfg, methodLoc);
     }
     for (int i = 0; i < cfg->basicBlocks.size(); i++) {
         outEnvironments[cfg->forwardsTopoSort[i]->id].bb = cfg->forwardsTopoSort[i];
@@ -86,17 +86,16 @@ unique_ptr<cfg::CFG> Inference::run(core::Context ctx, unique_ptr<cfg::CFG> cfg)
             continue;
         }
         Environment &current = outEnvironments[bb->id];
-        current.vars.reserve(bb->args.size());
         for (cfg::VariableUseSite &arg : bb->args) {
-            current.vars[arg.variable].typeAndOrigins.type = nullptr;
+            current.unsetType(arg.variable);
         }
         if (bb->backEdges.size() == 1) {
             auto *parent = bb->backEdges[0];
             bool isTrueBranch = parent->bexit.thenb == bb;
             if (!outEnvironments[parent->id].isDead) {
-                Environment tempEnv(methodLoc);
+                Environment tempEnv(*cfg, methodLoc);
                 auto &envAsSeenFromBranch =
-                    Environment::withCond(ctx, outEnvironments[parent->id], tempEnv, isTrueBranch, current.vars);
+                    Environment::withCond(ctx, outEnvironments[parent->id], tempEnv, isTrueBranch, current);
                 current.populateFrom(ctx, envAsSeenFromBranch);
             } else {
                 current.isDead = true;
@@ -108,9 +107,9 @@ unique_ptr<cfg::CFG> Inference::run(core::Context ctx, unique_ptr<cfg::CFG> cfg)
                     continue;
                 }
                 bool isTrueBranch = parent->bexit.thenb == bb;
-                Environment tempEnv(methodLoc);
+                Environment tempEnv(*cfg, methodLoc);
                 auto &envAsSeenFromBranch =
-                    Environment::withCond(ctx, outEnvironments[parent->id], tempEnv, isTrueBranch, current.vars);
+                    Environment::withCond(ctx, outEnvironments[parent->id], tempEnv, isTrueBranch, current);
                 if (!envAsSeenFromBranch.isDead) {
                     current.isDead = false;
                     current.mergeWith(ctx, envAsSeenFromBranch, core::Loc(ctx.file, parent->bexit.loc), *cfg.get(), bb,
@@ -120,18 +119,10 @@ unique_ptr<cfg::CFG> Inference::run(core::Context ctx, unique_ptr<cfg::CFG> cfg)
         }
 
         current.computePins(ctx, outEnvironments, *cfg.get(), bb);
-
-        for (auto &uninitialized : current.vars) {
-            if (uninitialized.second.typeAndOrigins.type.get() == nullptr) {
-                uninitialized.second.typeAndOrigins.type = core::Types::nilClass();
-                uninitialized.second.typeAndOrigins.origins.emplace_back(cfg->symbol.data(ctx)->loc());
-            } else {
-                uninitialized.second.typeAndOrigins.type->sanityCheck(ctx);
-            }
-        }
+        current.markUninitializedVarsAsNil(ctx, cfg->symbol);
 
         for (auto &blockArg : bb->args) {
-            current.getAndFillTypeAndOrigin(ctx, blockArg);
+            current.getAndFillTypeAndOrigin(blockArg);
         }
 
         visited[bb->id] = true;
@@ -195,19 +186,12 @@ unique_ptr<cfg::CFG> Inference::run(core::Context ctx, unique_ptr<cfg::CFG> cfg)
         }
         if (!current.isDead) {
             ENFORCE(bb->firstDeadInstructionIdx == -1);
-            current.getAndFillTypeAndOrigin(ctx, bb->bexit.cond);
+            current.getAndFillTypeAndOrigin(bb->bexit.cond);
             current.ensureGoodCondition(ctx, bb->bexit.cond.variable);
         } else {
             ENFORCE(bb->firstDeadInstructionIdx != -1);
         }
-        histogramInc("infer.environment.size", current.vars.size());
-        for (auto &pair : current.vars) {
-            auto &k = pair.second.knowledge;
-            histogramInc("infer.knowledge.truthy.yes.size", k.truthy->yesTypeTests.size());
-            histogramInc("infer.knowledge.truthy.no.size", k.truthy->noTypeTests.size());
-            histogramInc("infer.knowledge.falsy.yes.size", k.falsy->yesTypeTests.size());
-            histogramInc("infer.knowledge.falsy.no.size", k.falsy->noTypeTests.size());
-        }
+        current.emitEnvironmentMetrics();
     }
     if (startErrorCount == ctx.state.totalErrors()) {
         counterInc("infer.methods_typechecked.no_errors");
