@@ -208,6 +208,7 @@ module T::Private::Methods
         if default_checked_level == :never && !decl.on_failure.equal?(ARG_NOT_PROVIDED)
           raise BuilderError.new("To use .on_failure you must additionally call .checked(:tests) or .checked(:always), otherwise, the .on_failure has no effect.")
         end
+
         decl.checked = default_checked_level
       end
       if decl.on_failure.equal?(ARG_NOT_PROVIDED)

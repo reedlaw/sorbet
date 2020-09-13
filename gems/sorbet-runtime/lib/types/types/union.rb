@@ -27,6 +27,7 @@ module T::Types
       if types.size == 1
         return types[0].name
       end
+
       nilable = T::Utils.coerce(NilClass)
       trueclass = T::Utils.coerce(TrueClass)
       falseclass = T::Utils.coerce(FalseClass)

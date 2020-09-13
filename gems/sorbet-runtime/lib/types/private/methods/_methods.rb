@@ -134,6 +134,7 @@ module T::Private::Methods
     if !module_with_final?(target)
       return
     end
+
     # use reverse_each to check farther-up ancestors first, for better error messages. we could avoid this if we were on
     # the version of ruby that adds the optional argument to method_defined? that allows you to exclude ancestors.
     target_ancestors.reverse_each do |ancestor|
@@ -181,11 +182,13 @@ module T::Private::Methods
     if T::Private::Final.final_module?(mod) && (current_declaration.nil? || !current_declaration.final)
       raise "#{mod} was declared as final but its method `#{method_name}` was not declared as final"
     end
+
     _check_final_ancestors(mod, mod.ancestors, [method_name])
 
     if current_declaration.nil?
       return
     end
+
     T::Private::DeclState.current.reset!
 
     if method_name == :method_added || method_name == :singleton_method_added
@@ -403,6 +406,7 @@ module T::Private::Methods
   def self.run_all_sig_blocks
     loop do
       break if @sig_wrappers.empty?
+
       key, _ = @sig_wrappers.first
       run_sig_block_for_key(key)
     end
@@ -414,6 +418,7 @@ module T::Private::Methods
     if !module_with_final?(target) && !module_with_final?(source)
       return
     end
+
     add_module_with_final(target)
     install_hooks(target)
     _check_final_ancestors(target, target_ancestors - source.ancestors, source.instance_methods)
@@ -424,6 +429,7 @@ module T::Private::Methods
     if enable == is_enabled
       return
     end
+
     if is_enabled
       @old_hooks.each(&:restore)
       @old_hooks = nil
@@ -460,6 +466,7 @@ module T::Private::Methods
 
   def self.install_hooks(mod)
     return if @installed_hooks.include?(mod)
+
     @installed_hooks << mod
 
     if mod.singleton_class?

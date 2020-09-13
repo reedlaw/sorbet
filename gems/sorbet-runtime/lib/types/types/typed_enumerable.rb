@@ -29,20 +29,24 @@ module T::Types
     # @override Base
     def recursively_valid?(obj)
       return false unless obj.is_a?(Enumerable)
+
       case obj
       when Array
         begin
           it = 0
           while it < obj.count
             return false unless @type.recursively_valid?(obj[it])
+
             it += 1
           end
           true
         end
       when Hash
         return false unless @type.is_a?(FixedArray)
+
         types = @type.types
         return false if types.count != 2
+
         key_type = types[0]
         value_type = types[1]
         obj.each_pair do |key, val|
@@ -93,11 +97,13 @@ module T::Types
     # @override Base
     def describe_obj(obj)
       return super unless obj.is_a?(Enumerable)
+
       type_from_instance(obj).name
     end
 
     private def type_from_instances(objs)
       return objs.class unless objs.is_a?(Enumerable)
+
       obtained_types = []
       begin
         objs.each do |x|

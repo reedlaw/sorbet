@@ -13,6 +13,7 @@ module T::Private::Methods::SignatureValidation
       if signature.mode != Modes.standard
         raise "`initialize` should not use `.abstract` or `.implementation` or any other inheritance modifiers."
       end
+
       return
     end
 
@@ -179,6 +180,7 @@ module T::Private::Methods::SignatureValidation
     return unless [signature, super_signature].all? do |sig|
       sig.check_level == :always || (sig.check_level == :tests && T::Private::RuntimeLevels.check_tests?)
     end
+
     mode_noun = super_signature.mode == Modes.abstract ? 'implementation' : 'override'
 
     # arg types must be contravariant

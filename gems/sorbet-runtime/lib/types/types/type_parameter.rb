@@ -5,6 +5,7 @@ module T::Types
   class TypeParameter < Base
     def initialize(name)
       raise ArgumentError.new("not a symbol: #{name}") unless name.is_a?(Symbol)
+
       @name = name
     end
 

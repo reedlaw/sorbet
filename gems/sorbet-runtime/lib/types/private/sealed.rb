@@ -34,10 +34,12 @@ module T::Private::Sealed
     if T::Private::Final.final_module?(mod)
       raise "#{mod} was already declared `final!` and cannot be declared `sealed!`"
     end
+
     mod.extend(mod.is_a?(Class) ? NoInherit : NoIncludeExtend)
     if !decl_file
       raise "Couldn't determine declaration file for sealed class."
     end
+
     mod.instance_variable_set(:@sorbet_sealed_module_decl_file, decl_file)
   end
 

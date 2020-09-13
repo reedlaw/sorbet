@@ -34,6 +34,7 @@ module T::Private::Final
     if T::Private::Sealed.sealed_module?(mod)
       raise "#{mod} was already declared as sealed and cannot be declared as final"
     end
+
     mod.extend(mod.is_a?(Class) ? NoInherit : NoIncludeExtend)
     mark_as_final_module(mod)
     mark_as_final_module(mod.singleton_class)

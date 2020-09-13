@@ -83,6 +83,7 @@ class T::Enum
     if res.nil?
       raise KeyError.new("Enum #{self} key not found: #{serialized_val.inspect}")
     end
+
     res
   end
 
@@ -111,6 +112,7 @@ class T::Enum
     if instance.class != self
       raise "Cannot call #serialize on a value that is not an instance of #{self}."
     end
+
     instance.serialize
   end
 
@@ -120,6 +122,7 @@ class T::Enum
     if self == T::Enum
       raise "Cannot call T::Enum.deserialize directly. You must call on a specific child class."
     end
+
     self.from_serialized(mongo_value)
   end
 
@@ -327,6 +330,7 @@ class T::Enum
       if @mapping.include?(serialized)
         raise "Enum values must have unique serializations. Value '#{serialized}' is repeated on #{self}."
       end
+
       @mapping[serialized] = instance
     end
     @values.freeze

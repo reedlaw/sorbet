@@ -204,6 +204,7 @@ class Opus::Types::Test::Props::PropsTest < Critic::Unit::UnitTest
 
     def self.load(id, extra={}, opts={})
       return nil if id.nil?
+
       MyTestModel.new(id)
     end
   end

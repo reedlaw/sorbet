@@ -26,6 +26,7 @@ class T::InterfaceWrapper
     if wrapper.nil?
       raise "#{obj.class} cannot be cast to #{interface_mod}"
     end
+
     wrapper
   end
 

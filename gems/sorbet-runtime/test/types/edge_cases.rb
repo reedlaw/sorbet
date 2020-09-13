@@ -809,6 +809,7 @@ class Opus::Types::Test::EdgeCasesTest < Critic::Unit::UnitTest
       sig do
         counter += 1
         raise "foo" if counter == 1
+
         void
       end
       def foo; end

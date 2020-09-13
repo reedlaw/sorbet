@@ -38,6 +38,7 @@ module T::Private::Abstract::Declare
         if self.class == mod
           raise "#{mod} is declared as abstract; it cannot be instantiated"
         end
+
         super(*args, &blk)
       end
       if mod.respond_to?(:ruby2_keywords, true)

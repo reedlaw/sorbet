@@ -95,6 +95,7 @@ class T::Private::Methods::Signature
           # support it here, and I'm happy to discourage its use anyway.
           raise "Required params after optional params are not supported in method declarations. Method: #{method_desc}"
         end
+
         @arg_types << [param_name, type]
         @req_arg_count += 1
       when :opt

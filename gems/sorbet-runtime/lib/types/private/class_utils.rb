@@ -9,6 +9,7 @@ module T::Private::ClassUtils
       if old_method.name != new_method.name
         raise "Method names must match. old=#{old_method.name} new=#{new_method.name}"
       end
+
       @mod = mod
       @old_method = old_method
       @new_method = new_method
@@ -80,6 +81,7 @@ module T::Private::ClassUtils
 
     mod.ancestors.each do |ancestor|
       break if ancestor == mod
+
       if ancestor == original_owner
         # If we get here, that means the method we're trying to replace exists on a *prepended*
         # mixin, which means in order to supersede it, we'd need to create a method on a new
