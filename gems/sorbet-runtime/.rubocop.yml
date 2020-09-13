@@ -58,6 +58,10 @@ Layout/MultilineMethodCallIndentation:
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
+# Don't want to unnecessarily break Ruby < 2.6
+Style/SlicingWithRange:
+  Enabled: false
+
 Naming/FileName:
   Exclude:
     # Filename deliberately matches gem name
