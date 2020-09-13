@@ -338,7 +338,7 @@ class T::Enum::Test::EnumTest < Critic::Unit::UnitTest
 
     it 'raises an assertion if to_str is called (implicitly) and also returns the serialized value' do
       ex = assert_raises(NoMethodError) do
-        'foo ' + CardSuit::HEART
+        'foo ' + CardSuit::HEART # rubocop:disable Style/StringConcatenation
       end
       assert_equal(ENUM_CONVERSION_MSG, ex.message)
     end
@@ -362,7 +362,7 @@ class T::Enum::Test::EnumTest < Critic::Unit::UnitTest
     end
 
     it 'raises an assertion if to_str is called (implicitly) and also returns the serialized value' do
-      assert_equal('foo heart', 'foo ' + CardSuit::HEART)
+      assert_equal('foo heart', 'foo ' + CardSuit::HEART) # rubocop:disable Style/StringConcatenation
     end
   end
 
