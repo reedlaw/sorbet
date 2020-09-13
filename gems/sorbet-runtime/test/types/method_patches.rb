@@ -62,7 +62,7 @@ module Opus::Types::Test
     end
 
     it "return the same result for complex methods with and without signature" do
-      def @mod.no_sig(a, b = nil, *c, d:, e: nil, **f, &blk)
+      def @mod.no_sig(a, b=nil, *c, d:, e: nil, **f, &blk)
         :foo
       end
 
