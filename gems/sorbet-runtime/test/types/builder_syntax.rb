@@ -104,7 +104,7 @@ module Opus::Types::Test
 
         [:overridable, :abstract],
         [:overridable, :overridable],
-      ]
+      ].freeze
       INVALID_MODE_TESTS.each do |seq|
         name = (["sig"] + seq).join(".")
         it name do
