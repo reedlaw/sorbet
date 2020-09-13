@@ -103,7 +103,7 @@ module T::Private::Methods::SignatureValidation
 
     owner = signature.method.owner
     if (signature.mode == Modes.abstract || Modes::OVERRIDABLE_MODES.include?(signature.mode)) &&
-        owner.singleton_class?
+       owner.singleton_class?
       # Given a singleton class, we can check if it belongs to a
       # module by looking at its superclass; given `module M`,
       # `M.singleton_class.superclass == Module`, which is not true

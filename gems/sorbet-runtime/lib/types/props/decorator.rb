@@ -645,7 +645,7 @@ class T::Props::Decorator
       #
       unless rules[:without_accessors]
         if child.decorator.method(:prop_get).owner != method(:prop_get).owner &&
-            child.instance_method(name).source_location&.first == __FILE__
+           child.instance_method(name).source_location&.first == __FILE__
           child.send(:define_method, name) do
             T.unsafe(self.class).decorator.prop_get(self, name, rules)
           end
@@ -653,7 +653,7 @@ class T::Props::Decorator
 
         unless rules[:immutable]
           if child.decorator.method(:prop_set).owner != method(:prop_set).owner &&
-              child.instance_method("#{name}=").source_location&.first == __FILE__
+             child.instance_method("#{name}=").source_location&.first == __FILE__
             child.send(:define_method, "#{name}=") do |val|
               T.unsafe(self.class).decorator.prop_set(self, name, val, rules)
             end

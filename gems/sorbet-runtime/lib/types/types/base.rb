@@ -80,7 +80,7 @@ module T::Types
           # dropping either of parts eagerly make subtype test be too strict.
           # we have to try both cases, when we normally try only one
           return t2.types.any? {|t2_member| t1.subtype_of?(t2_member)} ||
-              t1.types.any? {|t1_member| t1_member.subtype_of?(t2)}
+                 t1.types.any? {|t1_member| t1_member.subtype_of?(t2)}
         end
         return t2.types.any? {|t2_member| t1.subtype_of?(t2_member)} # 3
       end

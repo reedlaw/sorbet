@@ -11,7 +11,7 @@ module T::Props::WeakConstructor
     decorator = self.class.decorator
 
     hash_keys_matching_props = decorator.construct_props_with_defaults(self, hash) +
-      decorator.construct_props_without_defaults(self, hash)
+                               decorator.construct_props_without_defaults(self, hash)
 
     if hash_keys_matching_props < hash.size
       raise ArgumentError.new("#{self.class}: Unrecognized properties: #{(hash.keys - decorator.props.keys).join(', ')}")
