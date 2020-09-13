@@ -194,6 +194,7 @@ module T::Private::Methods::CallValidation
     if method_sig.return_type.is_a?(T::Private::Types::Void)
       raise "Should have used create_validator_procedure_fast"
     end
+
     # trampoline to reduce stack frame size
     if method_sig.arg_types.empty?
       create_validator_method_fast0(mod, original_method, method_sig, method_sig.return_type.raw_type)

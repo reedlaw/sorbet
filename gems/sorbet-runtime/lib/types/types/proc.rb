@@ -40,6 +40,7 @@ module T::Types
         if arg_types.size != other.arg_types.size
           return false
         end
+
         arg_types.values.zip(other.arg_types.values).all? do |a, b|
           b.subtype_of?(a)
         end && returns.subtype_of?(other.returns)

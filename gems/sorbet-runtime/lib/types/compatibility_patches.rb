@@ -77,6 +77,7 @@ module T
       def arity
         arity = super
         return arity if arity != -1 || self.is_a?(Proc)
+
         sig = T::Private::Methods.signature_for_method(self)
         sig ? sig.method.arity : arity
       end

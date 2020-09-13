@@ -188,6 +188,7 @@ class T::Props::Decorator
   end
   def foreign_prop_get(instance, prop, foreign_class, rules=prop_rules(prop), opts={})
     return if !(value = prop_get(instance, prop, rules))
+
     T.unsafe(foreign_class).load(value, {}, opts)
   end
 

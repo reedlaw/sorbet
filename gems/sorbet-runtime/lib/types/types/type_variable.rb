@@ -13,6 +13,7 @@ module T::Types
       if !VALID_VARIANCES.include?(variance)
         raise TypeError.new("invalid variance #{variance}")
       end
+
       @variance = variance
     end
 

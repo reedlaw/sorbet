@@ -25,6 +25,7 @@ module T::Types
           if !@types[i].recursively_valid?(obj[i])
             return false
           end
+
           i += 1
         end
         true
@@ -41,6 +42,7 @@ module T::Types
           if !@types[i].valid?(obj[i])
             return false
           end
+
           i += 1
         end
         true

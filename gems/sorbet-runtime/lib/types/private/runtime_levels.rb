@@ -47,6 +47,7 @@ module T::Private::RuntimeLevels
     if @has_read_default_checked_level
       raise "Set the default checked level earlier. There are already some methods whose sig blocks have evaluated which would not be affected by the new default."
     end
+
     @default_checked_level = default_checked_level
   end
 

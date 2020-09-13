@@ -48,6 +48,7 @@ module T::Utils
     mod.ancestors.flat_map do |ancestor|
       # equivalent to checking Object.ancestors.include?(ancestor)
       next [] if Object <= ancestor
+
       ancestor.instance_methods(false) + ancestor.private_instance_methods(false)
     end.uniq
   end
@@ -111,6 +112,7 @@ module T::Utils
   def self.arity(method)
     arity = method.arity
     return arity if arity != -1 || method.is_a?(Proc)
+
     sig = T::Private::Methods.signature_for_method(method)
     sig ? sig.method.arity : arity
   end

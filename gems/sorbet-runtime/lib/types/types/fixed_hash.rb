@@ -21,6 +21,7 @@ module T::Types
       return false unless obj.is_a?(Hash)
       return false if @types.any? {|key, type| !type.recursively_valid?(obj[key])}
       return false if obj.any? {|key, _| !@types[key]}
+
       true
     end
 
@@ -29,6 +30,7 @@ module T::Types
       return false unless obj.is_a?(Hash)
       return false if @types.any? {|key, type| !type.valid?(obj[key])}
       return false if obj.any? {|key, _| !@types[key]}
+
       true
     end
 

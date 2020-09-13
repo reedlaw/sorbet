@@ -65,6 +65,7 @@ module T::Props
       klass = T.let(val.class, T.nilable(Class))
       until klass.nil?
         return true if T::Configuration.scalar_types.include?(klass.to_s)
+
         klass = klass.superclass
       end
       false
