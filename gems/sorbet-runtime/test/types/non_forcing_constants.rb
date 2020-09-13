@@ -5,7 +5,7 @@ class Opus::Types::Test::NonForcingConstantsTest < Critic::Unit::UnitTest
   class MyClass
   end
 
-  MyField = 0
+  MyField = 0 # rubocop:disable Naming/ConstantName
 
   autoload :RaisesIfLoaded, "#{__dir__}/fixtures/always_raise.rb"
 
