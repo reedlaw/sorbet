@@ -48,6 +48,10 @@ Style/MultipleComparison:
 Layout/MultilineMethodCallIndentation:
   Enabled: false
 
+# This doesn't recognize `typed: ...` as a magic comment
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+
 Naming/FileName:
   Exclude:
     # Filename deliberately matches gem name
