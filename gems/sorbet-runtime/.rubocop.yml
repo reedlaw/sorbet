@@ -20,6 +20,8 @@ Layout/SpaceInsideBlockBraces:
   SpaceBeforeBlockParameters: false
 Layout/EndAlignment:
   EnforcedStyleAlignWith: start_of_line
+Layout/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 Style/TrailingCommaInArrayLiteral:
