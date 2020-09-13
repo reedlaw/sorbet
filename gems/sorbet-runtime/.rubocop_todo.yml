@@ -250,14 +250,6 @@ Layout/SpaceInsideBlockBraces:
     - 'test/types/method_validation.rb'
     - 'test/types/props/private/setter_factory.rb'
 
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: space, no_space
-Layout/SpaceInsideParens:
-  Exclude:
-    - 'test/types/method_validation.rb'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
