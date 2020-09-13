@@ -231,11 +231,6 @@ Naming/AccessorMethodName:
     - 'lib/types/private/methods/_methods.rb'
     - 'lib/types/props/private/apply_default.rb'
 
-# Offense count: 1
-Naming/ConstantName:
-  Exclude:
-    - 'test/types/non_forcing_constants.rb'
-
 # Offense count: 2
 # Configuration parameters: EnforcedStyleForLeadingUnderscores.
 # SupportedStylesForLeadingUnderscores: disallowed, required, optional
