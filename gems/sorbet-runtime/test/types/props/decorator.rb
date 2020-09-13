@@ -167,7 +167,6 @@ class Opus::Types::Test::Props::DecoratorTest < Critic::Unit::UnitTest
 
   class StructHash < T::Struct
     class InnerStruct < T::Struct
-
     end
     prop :the_hash, T::Hash[String, InnerStruct]
   end

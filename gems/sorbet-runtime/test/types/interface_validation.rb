@@ -172,5 +172,4 @@ class Opus::Types::Test::InterfacesTest < Critic::Unit::UnitTest
     end
     assert_includes(err.message, "Incompatible return type in implementation of method")
   end
-
 end

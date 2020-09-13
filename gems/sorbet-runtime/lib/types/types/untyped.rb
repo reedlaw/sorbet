@@ -4,7 +4,6 @@
 module T::Types
   # A dynamic type, which permits whatever
   class Untyped < Base
-
     def initialize; end
 
     # @override Base
