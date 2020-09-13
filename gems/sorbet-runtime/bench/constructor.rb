@@ -75,4 +75,3 @@ module SorbetBenchmarks
     end
   end
 end
-
