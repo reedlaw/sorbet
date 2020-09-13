@@ -239,6 +239,7 @@ class Opus::Types::Test::FinalMethodTest < Critic::Unit::UnitTest
       def self.calls
         @calls
       end
+
       def self.included(x)
         @calls += 1
       end
@@ -261,6 +262,7 @@ class Opus::Types::Test::FinalMethodTest < Critic::Unit::UnitTest
       def self.calls
         @calls
       end
+
       def self.extended(x)
         @calls += 1
       end
