@@ -47,15 +47,6 @@ Layout/EmptyLines:
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
-# Offense count: 20
-# Cop supports --auto-correct.
-# Configuration parameters: Width, IgnoredPatterns.
-Layout/IndentationWidth:
-  Exclude:
-    - 'lib/types/props/serializable.rb'
-    - 'lib/types/types/self_type.rb'
-    - 'test/types/abstract_validation.rb'
-
 # Offense count: 12
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
