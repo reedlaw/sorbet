@@ -156,13 +156,6 @@ Style/EmptyElse:
     - 'lib/types/props/type_validation.rb'
     - 'lib/types/utils.rb'
 
-# Offense count: 17
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: always, always_true, never
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
 # Offense count: 34
 # Configuration parameters: MinBodyLength.
 Style/GuardClause:

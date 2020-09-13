@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Opus::Types::Test::SealedModuleSandbox
   T::Configuration.sealed_violation_whitelist = [/whitelist_violation__2\.rb/]
 
