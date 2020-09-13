@@ -7,7 +7,6 @@ require_relative '../lib/sorbet-runtime'
 
 module SorbetBenchmarks
   module Getters
-
     class ExamplePoro
       attr_accessor :attr
     end
