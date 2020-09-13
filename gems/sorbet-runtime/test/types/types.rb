@@ -425,7 +425,8 @@ module Opus::Types::Test
         msg = check_error_message_for_obj(type, {foo: 17})
         assert_equal(
           "Expected type T::Array[Symbol], got T::Hash[Symbol, Integer]",
-          msg)
+          msg
+        )
       end
 
       it 'can have its metatype instantiated' do
@@ -454,7 +455,8 @@ module Opus::Types::Test
         msg = check_error_message_for_obj(type, TestEnumerable.new)
         assert_equal(
           "Expected type T::Array[String], got Opus::Types::Test::TypesTest::TestEnumerable",
-          msg)
+          msg
+        )
       end
     end
 
@@ -463,7 +465,8 @@ module Opus::Types::Test
         t = T::Hash[Symbol, String]
         assert_equal(
           "T::Hash[Symbol, T::Array[String]]",
-          t.describe_obj({hello: ["world"]}))
+          t.describe_obj({hello: ["world"]})
+        )
       end
 
       it 'gives the right type error for an array' do
@@ -471,7 +474,8 @@ module Opus::Types::Test
         msg = check_error_message_for_obj(type, [:foo])
         assert_equal(
           "Expected type T::Hash[Symbol, String], got T::Array[Symbol]",
-          msg)
+          msg
+        )
       end
 
       it 'can have its metatype instantiated' do
@@ -537,7 +541,8 @@ module Opus::Types::Test
         t = T::Enumerator[Integer]
         assert_equal(
           "T::Enumerator[Integer]",
-          t.describe_obj([1, 2, 3].each))
+          t.describe_obj([1, 2, 3].each)
+        )
       end
 
       it 'works if the type is right' do
@@ -561,7 +566,8 @@ module Opus::Types::Test
         t = T::Range[Integer]
         assert_equal(
           "T::Range[Integer]",
-          t.describe_obj(10...20))
+          t.describe_obj(10...20)
+        )
       end
 
       it 'works if the range has a start and end' do
@@ -620,7 +626,8 @@ module Opus::Types::Test
         t = T::Set[Integer]
         assert_equal(
           "T::Set[Integer]",
-          t.describe_obj(Set.new([1, 2, 3])))
+          t.describe_obj(Set.new([1, 2, 3]))
+        )
       end
 
       it 'works if the type is right' do

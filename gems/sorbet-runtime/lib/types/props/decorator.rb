@@ -453,7 +453,8 @@ class T::Props::Decorator
     @class.send(:define_method, redacted_method) do
       value = self.public_send(prop_name)
       Chalk::Tools::RedactionUtils.redact_with_directive(
-        value, redaction)
+        value, redaction
+      )
     end
   end
 

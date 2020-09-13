@@ -47,18 +47,6 @@ Layout/EmptyLines:
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
-# Offense count: 12
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: symmetrical, new_line, same_line
-Layout/MultilineMethodCallBraceLayout:
-  Exclude:
-    - 'lib/types/props/decorator.rb'
-    - 'test/types/enum.rb'
-    - 'test/types/method_validation.rb'
-    - 'test/types/props/struct.rb'
-    - 'test/types/types.rb'
-
 # Offense count: 95
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentationWidth.
