@@ -52,7 +52,7 @@ module T::Private::Methods::CallValidation
     # reduce number of allocations that happen here.
 
     T::Profile.typecheck_sample_attempts -= 1
-    should_sample = T::Profile.typecheck_sample_attempts == 0
+    should_sample = T::Profile.typecheck_sample_attempts.zero?
     if should_sample
       T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
       T::Profile.typecheck_samples += 1
@@ -230,7 +230,7 @@ module T::Private::Methods::CallValidation
       # reduce number of allocations that happen here.
       # This method is a manually sped-up version of more general code in `validate_call`
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1
@@ -306,7 +306,7 @@ module T::Private::Methods::CallValidation
       # This method is a manually sped-up version of more general code in `validate_call`
 
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1
@@ -394,7 +394,7 @@ module T::Private::Methods::CallValidation
       # This method is a manually sped-up version of more general code in `validate_call`
 
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1
@@ -494,7 +494,7 @@ module T::Private::Methods::CallValidation
       # This method is a manually sped-up version of more general code in `validate_call`
 
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1
@@ -607,7 +607,7 @@ module T::Private::Methods::CallValidation
       # This method is a manually sped-up version of more general code in `validate_call`
 
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1
@@ -759,7 +759,7 @@ module T::Private::Methods::CallValidation
       # This method is a manually sped-up version of more general code in `validate_call`
 
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1
@@ -814,7 +814,7 @@ module T::Private::Methods::CallValidation
       # This method is a manually sped-up version of more general code in `validate_call`
 
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1
@@ -881,7 +881,7 @@ module T::Private::Methods::CallValidation
       # This method is a manually sped-up version of more general code in `validate_call`
 
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1
@@ -960,7 +960,7 @@ module T::Private::Methods::CallValidation
       # This method is a manually sped-up version of more general code in `validate_call`
 
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1
@@ -1052,7 +1052,7 @@ module T::Private::Methods::CallValidation
       # This method is a manually sped-up version of more general code in `validate_call`
 
       T::Profile.typecheck_sample_attempts -= 1
-      should_sample = T::Profile.typecheck_sample_attempts == 0
+      should_sample = T::Profile.typecheck_sample_attempts.zero?
       if should_sample
         T::Profile.typecheck_sample_attempts = T::Profile::SAMPLE_RATE
         T::Profile.typecheck_samples += 1

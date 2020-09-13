@@ -100,7 +100,7 @@ module T::Private::ClassUtils
     T::Configuration.without_ruby_warnings do
       T::Private::DeclState.current.without_on_method_added do
         mod.send(:define_method, name, &blk)
-        if blk.arity < 0 && mod.respond_to?(:ruby2_keywords, true)
+        if blk.arity.negative? && mod.respond_to?(:ruby2_keywords, true)
           mod.send(:ruby2_keywords, name)
         end
       end

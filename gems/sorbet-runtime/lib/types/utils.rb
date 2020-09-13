@@ -141,14 +141,14 @@ module T::Utils
     raise ArgumentError.new('must provide start_len') unless start_len
     raise ArgumentError.new('must provide end_len') unless end_len
 
-    raise ArgumentError.new('start_len must be >= 0') if start_len < 0
-    raise ArgumentError.new('end_len must be >= 0') if end_len < 0
+    raise ArgumentError.new('start_len must be >= 0') if start_len.negative?
+    raise ArgumentError.new('end_len must be >= 0') if end_len.negative?
 
     str = str.to_s
     return str if str.length <= start_len + end_len
 
     start_part = str[0...start_len - ellipsis.length]
-    end_part = end_len == 0 ? '' : str[-end_len..-1]
+    end_part = end_len.zero? ? '' : str[-end_len..-1]
 
     "#{start_part}#{ellipsis}#{end_part}"
   end
