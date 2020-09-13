@@ -13,11 +13,6 @@ Gemspec/RequiredRubyVersion:
   Exclude:
     - 'sorbet-runtime.gemspec'
 
-# Offense count: 117
-# Cop supports --auto-correct.
-Layout/EmptyLineAfterMagicComment:
-  Enabled: false
-
 # Offense count: 4
 # Cop supports --auto-correct.
 # Configuration parameters: IndentationWidth.
