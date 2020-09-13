@@ -424,7 +424,7 @@ module T::Private::Methods
     _check_final_ancestors(target, target_ancestors - source.ancestors, source.instance_methods)
   end
 
-  def self.set_final_checks_on_hooks(enable)
+  def self.set_final_checks_on_hooks(enable) # rubocop:disable Naming/AccessorMethodName
     is_enabled = !@old_hooks.nil?
     if enable == is_enabled
       return

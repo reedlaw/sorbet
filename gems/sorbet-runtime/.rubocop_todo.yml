@@ -63,12 +63,6 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 32
 
-# Offense count: 6
-Naming/AccessorMethodName:
-  Exclude:
-    - 'lib/types/private/methods/_methods.rb'
-    - 'lib/types/props/private/apply_default.rb'
-
 # Offense count: 2
 # Configuration parameters: EnforcedStyleForLeadingUnderscores.
 # SupportedStylesForLeadingUnderscores: disallowed, required, optional

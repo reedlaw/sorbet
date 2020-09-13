@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 # typed: strict
 
+# This cop has a false positive on `set_default` (which isn't actually an accessor)
+# rubocop:disable Naming/AccessorMethodName
+
 module T::Props
   module Private
     class ApplyDefault
@@ -168,3 +171,5 @@ module T::Props
     end
   end
 end
+
+# rubocop:enable Naming/AccessorMethodName
