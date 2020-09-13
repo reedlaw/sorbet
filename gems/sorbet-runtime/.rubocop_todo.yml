@@ -38,27 +38,6 @@ Layout/EmptyLines:
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
-# Offense count: 95
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: aligned, indented, indented_relative_to_receiver
-Layout/MultilineMethodCallIndentation:
-  Exclude:
-    - 'lib/types/interface_wrapper.rb'
-    - 'lib/types/props/custom_type.rb'
-    - 'lib/types/props/decorator.rb'
-    - 'lib/types/props/pretty_printable.rb'
-    - 'lib/types/props/private/apply_default.rb'
-    - 'lib/types/props/private/deserializer_generator.rb'
-    - 'lib/types/props/private/serde_transform.rb'
-    - 'lib/types/props/private/serializer_generator.rb'
-    - 'lib/types/props/private/setter_factory.rb'
-    - 'lib/types/props/type_validation.rb'
-    - 'test/types/abstract_validation.rb'
-    - 'test/types/builder_syntax.rb'
-    - 'test/types/method_validation.rb'
-    - 'test/types/validate_override_shape.rb'
-
 # Offense count: 70
 # Configuration parameters: IgnoredMethods.
 Metrics/AbcSize:

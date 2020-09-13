@@ -43,6 +43,11 @@ Lint/UselessMethodDefinition:
 Style/MultipleComparison:
   Enabled: false
 
+# We don't like indentation in multiline sigs, but do like it otherwise;
+# we probably ought to open-source this style option
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
 Naming/FileName:
   Exclude:
     # Filename deliberately matches gem name
