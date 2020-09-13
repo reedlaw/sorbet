@@ -115,7 +115,7 @@ module Opus::Types::Test
           mod = Module.new do
             extend T::Sig
             sig {params(a: Integer, b: Integer).returns(Integer)}
-            def self.foo(a: 1, b:)
+            def self.foo(a: 1, b:) # rubocop:disable Style/KeywordParametersOrder
               a + b
             end
           end
