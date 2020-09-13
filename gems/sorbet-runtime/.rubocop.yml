@@ -34,6 +34,8 @@ Style/AccessModifierDeclarations:
   EnforcedStyle: inline
 Style/Semicolon:
   AllowAsExpressionSeparator: true
+Style/SingleLineMethods:
+  AllowIfMethodIsEmpty: true
 
 # This doesn't play very well with implementations of Sorbet abstract methods
 Lint/UnusedMethodArgument:

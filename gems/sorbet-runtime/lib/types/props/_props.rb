@@ -20,13 +20,25 @@ module T::Props
     extend T::Sig
     extend T::Helpers
 
-    def props; decorator.props; end
-    def plugins; @plugins ||= []; end
+    def props
+      decorator.props
+    end
 
-    def decorator_class; Decorator; end
+    def plugins
+      @plugins ||= []
+    end
 
-    def decorator; @decorator ||= decorator_class.new(self); end
-    def reload_decorator!; @decorator = decorator_class.new(self); end
+    def decorator_class
+      Decorator
+    end
+
+    def decorator
+      @decorator ||= decorator_class.new(self)
+    end
+
+    def reload_decorator!
+      @decorator = decorator_class.new(self)
+    end
 
     # @!method self.prop(name, type, opts={})
     #

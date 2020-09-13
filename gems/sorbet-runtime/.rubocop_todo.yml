@@ -247,24 +247,6 @@ Style/RescueStandardError:
     - 'lib/types/props/serializable.rb'
     - 'lib/types/types/typed_enumerable.rb'
 
-# Offense count: 33
-# Cop supports --auto-correct.
-# Configuration parameters: AllowIfMethodIsEmpty.
-Style/SingleLineMethods:
-  Exclude:
-    - 'lib/types/private/methods/modes.rb'
-    - 'lib/types/props/_props.rb'
-    - 'lib/types/props/decorator.rb'
-    - 'lib/types/props/optional.rb'
-    - 'lib/types/props/serializable.rb'
-    - 'test/types/abstract_validation.rb'
-    - 'test/types/builder_syntax.rb'
-    - 'test/types/edge_cases.rb'
-    - 'test/types/interface_validation.rb'
-    - 'test/types/method_modes.rb'
-    - 'test/types/types.rb'
-    - 'test/types/validate_override_types.rb'
-
 # Offense count: 11
 # Cop supports --auto-correct.
 Style/SlicingWithRange:
