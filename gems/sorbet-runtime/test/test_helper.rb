@@ -30,7 +30,7 @@ module Opus; end
 module Chalk; end
 module Chalk::Tools; end
 module Chalk::Tools::RedactionUtils
-  def self.redact_with_directive(value, opts = [])
+  def self.redact_with_directive(value, opts=[])
     opts = Array(opts)
     case opts[0]
     when :redact_digits
