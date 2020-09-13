@@ -407,7 +407,7 @@ module T::Private::Methods
     loop do
       break if @sig_wrappers.empty?
 
-      key, _ = @sig_wrappers.first
+      key, = @sig_wrappers.first
       run_sig_block_for_key(key)
     end
   end
