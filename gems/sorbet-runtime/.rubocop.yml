@@ -32,6 +32,8 @@ Style/TrivialAccessors:
   IgnoreClassMethods: true
 Style/AccessModifierDeclarations:
   EnforcedStyle: inline
+Style/Semicolon:
+  AllowAsExpressionSeparator: true
 
 # This doesn't play very well with implementations of Sorbet abstract methods
 Lint/UnusedMethodArgument:

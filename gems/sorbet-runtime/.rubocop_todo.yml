@@ -247,15 +247,6 @@ Style/RescueStandardError:
     - 'lib/types/props/serializable.rb'
     - 'lib/types/types/typed_enumerable.rb'
 
-# Offense count: 17
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAsExpressionSeparator.
-Style/Semicolon:
-  Exclude:
-    - 'test/types/builder_syntax.rb'
-    - 'test/types/casts.rb'
-    - 'test/types/types.rb'
-
 # Offense count: 33
 # Cop supports --auto-correct.
 # Configuration parameters: AllowIfMethodIsEmpty.
