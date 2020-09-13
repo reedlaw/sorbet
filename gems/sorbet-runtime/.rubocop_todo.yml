@@ -40,16 +40,6 @@ Layout/EmptyLines:
     - 'lib/types/props/serializable.rb'
     - 'test/types/types.rb'
 
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, no_empty_lines
-Layout/EmptyLinesAroundBlockBody:
-  Exclude:
-    - 'test/types/attached_class.rb'
-    - 'test/types/method_validation.rb'
-    - 'test/types/props/decorator.rb'
-
 # Offense count: 15
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.

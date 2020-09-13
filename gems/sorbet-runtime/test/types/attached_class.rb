@@ -4,7 +4,6 @@ require_relative '../test_helper'
 module Opus::Types::Test
   class AttachedClassTest < Critic::Unit::UnitTest
     it 'can type self methods (experimental)' do
-
       class Base
         extend T::Sig
 
@@ -21,7 +20,6 @@ module Opus::Types::Test
     end
 
     it 'can type self methods' do
-
       class Base
         extend T::Sig
 
@@ -38,7 +36,6 @@ module Opus::Types::Test
     end
 
     it 'can type self methods that use self.new' do
-
       class Base
         extend T::Sig
 
@@ -55,7 +52,6 @@ module Opus::Types::Test
     end
 
     it 'does not throw when the returned value is bad' do
-
       class Base
         extend T::Sig
 

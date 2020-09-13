@@ -174,7 +174,6 @@ class Opus::Types::Test::Props::DecoratorTest < Critic::Unit::UnitTest
 
   describe 'validating prop values' do
     it 'validates that subdoc hashes have the correct values' do
-
       assert_raises(TypeError) do
         StructHash.new(the_hash: {'foo' => {}})
       end
