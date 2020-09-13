@@ -46,6 +46,6 @@ module T::NonForcingConstants
       end
     end
 
-    return current_klass.===(val)
+    current_klass.===(val)
   end
 end
