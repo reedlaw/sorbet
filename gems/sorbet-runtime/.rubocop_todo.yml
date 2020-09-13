@@ -211,15 +211,6 @@ Layout/ParameterAlignment:
   Exclude:
     - 'lib/types/private/methods/call_validation.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: space, no_space
-Layout/SpaceAroundEqualsInParameterDefault:
-  Exclude:
-    - 'test/test_helper.rb'
-    - 'test/types/method_patches.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment, EnforcedStyleForExponentOperator.
