@@ -123,13 +123,6 @@ Layout/EmptyLinesAroundModuleBody:
     - 'lib/types/props/private/deserializer_generator.rb'
     - 'lib/types/props/private/serializer_generator.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment, AllowBeforeTrailingComments, ForceEqualSignAlignment.
-Layout/ExtraSpacing:
-  Exclude:
-    - 'lib/types/props/generated_code_validation.rb'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 # Configuration parameters: IndentationWidth.
