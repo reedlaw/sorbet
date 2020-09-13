@@ -7,7 +7,6 @@ module T::Types
   # As AttachedClass is modeled statically as a type member on every singleton
   # class, this is consistent with the runtime behavior for all type members.
   class AttachedClassType < Base
-
     def initialize(); end
 
     # @override Base

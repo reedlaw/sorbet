@@ -9,7 +9,6 @@ class Opus::Types::Test::Props::Private::SetterFactoryTest < Critic::Unit::UnitT
     prop :validated, T.untyped, setter_validate: ->(_prop, _value) {raise Error.new 'invalid'}
     prop :nilable_validated, T.nilable(Integer), setter_validate: ->(_prop, _value) {raise Error.new 'invalid'}
     prop :unvalidated, T.untyped, setter_validate: ->(prop, _value) {raise Error.new 'bad prop' unless prop == :unvalidated}
-
   end
 
   describe 'setter_validate' do
@@ -47,5 +46,4 @@ class Opus::Types::Test::Props::Private::SetterFactoryTest < Critic::Unit::UnitT
       TestSetValidate.validate_prop_value(:nilable_validated, nil)
     end
   end
-
 end

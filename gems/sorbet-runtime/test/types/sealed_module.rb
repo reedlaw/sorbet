@@ -2,7 +2,6 @@
 require_relative '../test_helper'
 
 class Opus::Types::Test::SealedModuleTest < Critic::Unit::UnitTest
-
   # Some tests in this file need to require fixtures to exercise cross-file behavior.
   # The understanding is that all fixtures should put their classes into the same namespace,
   # so that we can clean up after them.

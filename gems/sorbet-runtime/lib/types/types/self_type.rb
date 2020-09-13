@@ -5,7 +5,6 @@ module T::Types
   # Modeling self-types properly at runtime would require additional tracking,
   # so at runtime we permit all values and rely on the static checker.
   class SelfType < Base
-
     def initialize(); end
 
     # @override Base

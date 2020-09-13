@@ -37,6 +37,5 @@ module T::Types
     private def subtype_of_single?(other)
       raise "This should never be reached if you're going through `subtype_of?` (and you should be)"
     end
-
   end
 end

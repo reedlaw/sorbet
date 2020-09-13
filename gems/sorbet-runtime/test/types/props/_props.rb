@@ -358,5 +358,4 @@ class Opus::Types::Test::Props::PropsTest < Critic::Unit::UnitTest
       assert_equal("foo", o.intersection)
     end
   end
-
 end

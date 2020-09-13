@@ -40,26 +40,6 @@ Layout/EmptyLines:
     - 'lib/types/props/serializable.rb'
     - 'test/types/types.rb'
 
-# Offense count: 15
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines, beginning_only, ending_only
-Layout/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'lib/types/private/types/type_alias.rb'
-    - 'lib/types/types/attached_class.rb'
-    - 'lib/types/types/intersection.rb'
-    - 'lib/types/types/noreturn.rb'
-    - 'lib/types/types/self_type.rb'
-    - 'lib/types/types/untyped.rb'
-    - 'test/types/interface_validation.rb'
-    - 'test/types/props/_props.rb'
-    - 'test/types/props/decorator.rb'
-    - 'test/types/props/private/setter_factory.rb'
-    - 'test/types/sealed_module.rb'
-    - 'test/types/types.rb'
-    - 'test/types/validate_override_types.rb'
-
 # Offense count: 9
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.

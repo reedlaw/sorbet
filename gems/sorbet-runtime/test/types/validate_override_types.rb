@@ -99,6 +99,5 @@ module Opus::Types::Test
 
       assert_includes(err.message, "Incompatible return type in override of method `foo`")
     end
-
   end
 end

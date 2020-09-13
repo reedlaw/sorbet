@@ -862,7 +862,6 @@ module Opus::Types::Test
       def hello
         'hello'
       end
-
     end
 
     class InterfaceImplementor2
@@ -871,7 +870,6 @@ module Opus::Types::Test
       def goodbye
         'goodbye'
       end
-
     end
 
     describe "Enum" do
