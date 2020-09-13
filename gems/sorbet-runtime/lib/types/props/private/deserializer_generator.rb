@@ -78,7 +78,7 @@ module T::Props
             serialized_form: hash_key,
             default: defaults[prop],
             nilable_type: T::Props::Utils.optional_prop?(rules),
-            raise_on_nil_write: !!rules[:raise_on_nil_write],
+            raise_on_nil_write: !!rules[:raise_on_nil_write], # rubocop:disable Style/DoubleNegation
           )
 
           <<~RUBY
