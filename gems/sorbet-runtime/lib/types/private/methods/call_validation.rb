@@ -712,22 +712,22 @@ module T::Private::Methods::CallValidation
       create_validator_procedure_fast0(mod, original_method, method_sig)
     elsif method_sig.arg_types.length == 1
       create_validator_procedure_fast1(mod, original_method, method_sig,
-                                    method_sig.arg_types[0][1].raw_type)
+                                       method_sig.arg_types[0][1].raw_type)
     elsif method_sig.arg_types.length == 2
       create_validator_procedure_fast2(mod, original_method, method_sig,
-                                    method_sig.arg_types[0][1].raw_type,
-                                    method_sig.arg_types[1][1].raw_type)
+                                       method_sig.arg_types[0][1].raw_type,
+                                       method_sig.arg_types[1][1].raw_type)
     elsif method_sig.arg_types.length == 3
       create_validator_procedure_fast3(mod, original_method, method_sig,
-                                    method_sig.arg_types[0][1].raw_type,
-                                    method_sig.arg_types[1][1].raw_type,
-                                    method_sig.arg_types[2][1].raw_type)
+                                       method_sig.arg_types[0][1].raw_type,
+                                       method_sig.arg_types[1][1].raw_type,
+                                       method_sig.arg_types[2][1].raw_type)
     elsif method_sig.arg_types.length == 4
       create_validator_procedure_fast4(mod, original_method, method_sig,
-                                    method_sig.arg_types[0][1].raw_type,
-                                    method_sig.arg_types[1][1].raw_type,
-                                    method_sig.arg_types[2][1].raw_type,
-                                    method_sig.arg_types[3][1].raw_type)
+                                       method_sig.arg_types[0][1].raw_type,
+                                       method_sig.arg_types[1][1].raw_type,
+                                       method_sig.arg_types[2][1].raw_type,
+                                       method_sig.arg_types[3][1].raw_type)
     else
       raise "should not happen"
     end
