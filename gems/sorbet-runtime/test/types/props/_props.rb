@@ -198,6 +198,7 @@ class Opus::Types::Test::Props::PropsTest < Critic::Unit::UnitTest
 
   class MyTestModel
     attr_reader :id
+
     def initialize(id)
       @id = id
     end

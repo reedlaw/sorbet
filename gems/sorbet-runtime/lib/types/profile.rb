@@ -7,6 +7,7 @@ module T::Profile
     attr_accessor :typecheck_duration
     attr_accessor :typecheck_samples
     attr_accessor :typecheck_sample_attempts
+
     def typecheck_duration_estimate
       total_typechecks = typecheck_samples * SAMPLE_RATE + (SAMPLE_RATE - typecheck_sample_attempts)
       typechecks_measured = typecheck_samples * SAMPLE_RATE
