@@ -13,15 +13,6 @@ Gemspec/RequiredRubyVersion:
   Exclude:
     - 'sorbet-runtime.gemspec'
 
-# Offense count: 15
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentOneStep, IndentationWidth.
-# SupportedStyles: case, end
-Layout/CaseIndentation:
-  Exclude:
-    - 'lib/types/props/utils.rb'
-    - 'test/types/enum.rb'
-
 # Offense count: 117
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterMagicComment:
