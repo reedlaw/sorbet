@@ -68,18 +68,6 @@ Layout/MultilineMethodCallIndentation:
     - 'test/types/method_validation.rb'
     - 'test/types/validate_override_shape.rb'
 
-# Offense count: 6
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: aligned, indented
-Layout/MultilineOperationIndentation:
-  Exclude:
-    - 'lib/types/private/methods/call_validation.rb'
-    - 'lib/types/private/methods/signature_validation.rb'
-    - 'lib/types/props/decorator.rb'
-    - 'lib/types/props/weak_constructor.rb'
-    - 'lib/types/types/base.rb'
-
 # Offense count: 70
 # Configuration parameters: IgnoredMethods.
 Metrics/AbcSize:
