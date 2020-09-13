@@ -230,7 +230,7 @@ module T::Props::Serializable::DecoratorMethods
     context = "  #{source_lines[(previous_blank + 1)...next_blank].join("\n  ")}"
     <<~MSG
       Error in #{decorated_class.name}##{generated_method}: #{error.message}
-      at line #{line_num-previous_blank-1} in:
+      at line #{line_num - previous_blank - 1} in:
       #{context}
     MSG
   end
