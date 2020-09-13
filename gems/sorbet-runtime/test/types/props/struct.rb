@@ -127,7 +127,8 @@ class Opus::Types::Test::Props::StructTest < Critic::Unit::UnitTest
 
     it 'tstruct deserialize optional fields' do
       doc = TestStruct.from_hash(
-        {'foo0' => 0, 'foo1' => 1, 'foo2' => '2', 'foo3' => '3', 'foo5' => [{'bar1' => 'bar1', 'bar2' => 'bar2'}]})
+        {'foo0' => 0, 'foo1' => 1, 'foo2' => '2', 'foo3' => '3', 'foo5' => [{'bar1' => 'bar1', 'bar2' => 'bar2'}]}
+      )
       assert_equal('bar1', doc.foo5[0].bar1)
 
       assert_equal(String, TestStruct.props[:foo2][:type])
@@ -142,7 +143,8 @@ class Opus::Types::Test::Props::StructTest < Critic::Unit::UnitTest
 
       assert_equal(T::Array[Opus::Types::Test::Props::StructTest::SubStruct], TestStruct.props[:foo5][:type])
       assert_equal(
-        T.nilable(T::Array[Opus::Types::Test::Props::StructTest::SubStruct]), TestStruct.props[:foo5][:type_object])
+        T.nilable(T::Array[Opus::Types::Test::Props::StructTest::SubStruct]), TestStruct.props[:foo5][:type_object]
+      )
     end
 
     it 'tstruct need to initialize required fields' do

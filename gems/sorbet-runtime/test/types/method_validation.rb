@@ -324,7 +324,8 @@ module Opus::Types::Test
         end
         assert_match(
           "Return value: Expected type T::Array[String], got Opus::Types::Test::MethodValidationTest::TestEnumerable",
-          err.message.lines[0])
+          err.message.lines[0]
+        )
       end
 
       describe 'ranges' do

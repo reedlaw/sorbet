@@ -162,7 +162,8 @@ class T::Enum::Test::EnumTest < Critic::Unit::UnitTest
           "#<T::Enum::Test::EnumTest::CardSuit::SPADE>" => "x",
           "#<T::Enum::Test::EnumTest::CardSuitCustom::HEART>" => "y",
         },
-        JSON.parse(h.to_json))
+        JSON.parse(h.to_json)
+      )
     end
   end
 
