@@ -43,7 +43,7 @@ module T::Types
     #
     # This method cannot be overridden (see `method_added` above).
     # Subclasses only need to implement `subtype_of_single?`).
-    def subtype_of?(t2)
+    def subtype_of?(t2) # rubocop:disable Naming/MethodParameterName
       t1 = self
 
       if t2.is_a?(T::Private::Types::TypeAlias)

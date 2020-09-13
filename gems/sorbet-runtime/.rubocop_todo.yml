@@ -71,23 +71,6 @@ Naming/MemoizedInstanceVariableName:
     - 'lib/types/props/has_lazily_specialized_methods.rb'
     - 'lib/types/types/simple.rb'
 
-# Offense count: 78
-# Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
-# AllowedNames: at, by, db, id, in, io, ip, of, on, os, pp, to
-Naming/MethodParameterName:
-  Exclude:
-    - 'bench/typecheck.rb'
-    - 'lib/types/types/base.rb'
-    - 'test/types/abstract_validation.rb'
-    - 'test/types/builder_syntax.rb'
-    - 'test/types/configuration.rb'
-    - 'test/types/edge_cases.rb'
-    - 'test/types/final_method.rb'
-    - 'test/types/method_patches.rb'
-    - 'test/types/method_validation.rb'
-    - 'test/types/types.rb'
-    - 'test/types/validate_override_types.rb'
-
 # Offense count: 6
 # Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
 # NamePrefix: is_, has_, have_

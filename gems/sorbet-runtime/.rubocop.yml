@@ -57,6 +57,12 @@ Naming/FileName:
     # Filename deliberately matches gem name
     - 'lib/sorbet-runtime.rb'
 
+Naming/MethodParameterName:
+  Exclude:
+    # Don't enforce for example method definitions in tests, of which we have a lot
+    - 'test/**/*'
+    - 'bench/**/*'
+
 Lint/MissingSuper:
   Exclude:
     # Don't force type definitions to call `super` in initialize
