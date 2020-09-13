@@ -376,10 +376,12 @@ class T::Enum::Test::EnumTest < Critic::Unit::UnitTest
     end
 
     it 'returns false if the types mismatch for ===' do
+      # rubocop:disable Style/CaseEquality
       assert_equal(false, 'spade' === CardSuit::SPADE)
       assert_equal(false, 'club' === CardSuit::SPADE)
       assert_equal(false, CardSuit::SPADE === 'spade')
       assert_equal(false, CardSuit::CLUB === 'spade')
+      # rubocop:enable Style/CaseEquality
     end
 
     it 'returns false for a string in a `when` compared to an enum value' do
@@ -430,15 +432,17 @@ class T::Enum::Test::EnumTest < Critic::Unit::UnitTest
     end
 
     it 'raises an assertion if string is lhs of === comparison' do
+      # rubocop:disable Style/CaseEquality
       assert_equal(true, 'spade' === CardSuit::SPADE)
-
       assert_equal(false, 'club' === CardSuit::SPADE)
+      # rubocop:enable Style/CaseEquality
     end
 
     it 'raises an assertion if string is rhs of === comparison' do
+      # rubocop:disable Style/CaseEquality
       assert_equal(true, CardSuit::SPADE === 'spade')
-
       assert_equal(false, CardSuit::CLUB === 'spade')
+      # rubocop:enable Style/CaseEquality
     end
 
     it 'raises an assertion for a string in a `when` compared to an enum value' do

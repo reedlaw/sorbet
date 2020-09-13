@@ -122,10 +122,11 @@ class T::InterfaceWrapper
   #     impl.do_things
   #   end
   def self.dynamic_cast(obj, mod)
-    if obj.is_a?(T::InterfaceWrapper)
+    case obj
+    when T::InterfaceWrapper
       target_obj = obj.__target_obj_DO_NOT_USE
       target_obj.is_a?(mod) ? target_obj : nil
-    elsif obj.is_a?(mod)
+    when mod
       obj
     else
       nil

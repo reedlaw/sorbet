@@ -19,7 +19,7 @@ module T::Props
       .checked(:never)
     end
     def instance?(value)
-      self.===(value)
+      self.===(value) # rubocop:disable Style/CaseEquality
     end
 
     # Alias for backwards compatibility

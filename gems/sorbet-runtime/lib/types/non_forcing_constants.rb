@@ -40,12 +40,12 @@ module T::NonForcingConstants
         current_klass = current_klass.const_get(part)
         current_prefix = "#{current_prefix}::#{part}"
 
-        if !Module.===(current_klass)
+        if !Module.===(current_klass) # rubocop:disable Style/CaseEquality
           raise ArgumentError.new("#{current_prefix} is not a class or module")
         end
       end
     end
 
-    current_klass.===(val)
+    current_klass.===(val) # rubocop:disable Style/CaseEquality
   end
 end

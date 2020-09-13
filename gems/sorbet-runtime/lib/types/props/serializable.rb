@@ -105,12 +105,13 @@ module T::Props::Serializable
   end
 
   private def recursive_stringify_keys(obj)
-    if obj.is_a?(Hash)
+    case obj
+    when Hash
       new_obj = obj.class.new
       obj.each do |k, v|
         new_obj[k.to_s] = recursive_stringify_keys(v)
       end
-    elsif obj.is_a?(Array)
+    when Array
       new_obj = obj.map {|v| recursive_stringify_keys(v)}
     else
       new_obj = obj

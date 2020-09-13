@@ -113,23 +113,6 @@ Style/BisectedAttrAccessor:
   Exclude:
     - 'lib/types/private/methods/signature.rb'
 
-# Offense count: 11
-# Cop supports --auto-correct.
-# Configuration parameters: AllowOnConstant.
-Style/CaseEquality:
-  Exclude:
-    - 'lib/types/non_forcing_constants.rb'
-    - 'lib/types/props/custom_type.rb'
-    - 'test/types/enum.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/CaseLikeIf:
-  Exclude:
-    - 'lib/types/interface_wrapper.rb'
-    - 'lib/types/private/methods/call_validation.rb'
-    - 'lib/types/props/serializable.rb'
-
 # Offense count: 152
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
