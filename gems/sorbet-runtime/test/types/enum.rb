@@ -369,8 +369,10 @@ class T::Enum::Test::EnumTest < Critic::Unit::UnitTest
 
   describe 'string value comparison assertions' do
     it 'returns false if the types mismatch for ==' do
+      # rubocop:disable Style/YodaCondition
       assert_equal(false, 'spade' == CardSuit::SPADE)
       assert_equal(false, 'diamond' == CardSuit::SPADE)
+      # rubocop:enable Style/YodaCondition
       assert_equal(false, CardSuit::SPADE == 'spade')
       assert_equal(false, CardSuit::SPADE == 'diamond')
     end
@@ -420,14 +422,14 @@ class T::Enum::Test::EnumTest < Critic::Unit::UnitTest
     end
 
     it 'raises an assertion if string is lhs of comparison' do
+      # rubocop:disable Style/YodaCondition
       assert_equal(true, 'spade' == CardSuit::SPADE)
-
       assert_equal(false, 'diamond' == CardSuit::SPADE)
+      # rubocop:enable Style/YodaCondition
     end
 
     it 'raises an assertion if string is rhs of comparison' do
       assert_equal(true, CardSuit::SPADE == 'spade')
-
       assert_equal(false, CardSuit::SPADE == 'diamond')
     end
 
