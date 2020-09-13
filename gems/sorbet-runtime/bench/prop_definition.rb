@@ -7,7 +7,6 @@ require_relative '../lib/sorbet-runtime'
 
 module SorbetBenchmarks
   module PropDefinition
-
     class Subdoc < T::Struct
       prop :prop, String
     end

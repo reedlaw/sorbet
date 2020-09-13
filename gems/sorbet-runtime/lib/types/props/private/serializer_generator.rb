@@ -3,7 +3,6 @@
 
 module T::Props
   module Private
-
     # Generates a specialized `serialize` implementation for a subclass of
     # T::Props::Serializable.
     #

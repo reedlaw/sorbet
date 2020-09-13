@@ -40,22 +40,6 @@ Layout/EmptyLines:
     - 'lib/types/props/serializable.rb'
     - 'test/types/types.rb'
 
-# Offense count: 9
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
-Layout/EmptyLinesAroundModuleBody:
-  Exclude:
-    - 'bench/constructor.rb'
-    - 'bench/deserialize.rb'
-    - 'bench/getters.rb'
-    - 'bench/prop_definition.rb'
-    - 'bench/setters.rb'
-    - 'lib/types/private/retry.rb'
-    - 'lib/types/props/has_lazily_specialized_methods.rb'
-    - 'lib/types/props/private/deserializer_generator.rb'
-    - 'lib/types/props/private/serializer_generator.rb'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 # Configuration parameters: IndentationWidth.

@@ -2,7 +2,6 @@
 # typed: false
 
 module T::Props
-
   # Helper for generating methods that replace themselves with a specialized
   # version on first use. The main use case is when we want to generate a
   # method using the full set of props on a class; we can't do that during

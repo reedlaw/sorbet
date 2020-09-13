@@ -7,7 +7,6 @@ require_relative '../lib/sorbet-runtime'
 
 module SorbetBenchmarks
   module Constructor
-
     class Example < T::Struct
       class Subdoc < T::Struct
         prop :prop, String

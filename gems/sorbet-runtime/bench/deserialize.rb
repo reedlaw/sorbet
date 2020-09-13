@@ -7,7 +7,6 @@ require_relative '../lib/sorbet-runtime'
 
 module SorbetBenchmarks
   module Deserialize
-
     class Example
       include T::Props::Serializable
 
