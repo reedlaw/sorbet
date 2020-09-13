@@ -30,6 +30,8 @@ Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
 Style/TrivialAccessors:
   IgnoreClassMethods: true
+Style/AccessModifierDeclarations:
+  EnforcedStyle: inline
 
 # This doesn't play very well with implementations of Sorbet abstract methods
 Lint/UnusedMethodArgument:
