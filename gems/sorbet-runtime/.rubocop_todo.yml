@@ -184,19 +184,6 @@ Layout/MultilineOperationIndentation:
     - 'lib/types/props/weak_constructor.rb'
     - 'lib/types/types/base.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-# SupportedStyles: space, no_space
-# SupportedStylesForEmptyBraces: space, no_space
-Layout/SpaceInsideBlockBraces:
-  Exclude:
-    - 'bench/getters.rb'
-    - 'test/types/edge_cases.rb'
-    - 'test/types/final_module.rb'
-    - 'test/types/method_validation.rb'
-    - 'test/types/props/private/setter_factory.rb'
-
 # Offense count: 70
 # Configuration parameters: IgnoredMethods.
 Metrics/AbcSize:
