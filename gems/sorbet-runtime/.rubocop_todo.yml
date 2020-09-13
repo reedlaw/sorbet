@@ -250,17 +250,6 @@ Layout/SpaceInsideBlockBraces:
     - 'test/types/method_validation.rb'
     - 'test/types/props/private/setter_factory.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: final_newline, final_blank_line
-Layout/TrailingEmptyLines:
-  Exclude:
-    - 'bench/constructor.rb'
-    - 'bench/prop_definition.rb'
-    - 'bench/setters.rb'
-    - 'lib/types/props/private/serializer_generator.rb'
-
 # Offense count: 70
 # Configuration parameters: IgnoredMethods.
 Metrics/AbcSize:
