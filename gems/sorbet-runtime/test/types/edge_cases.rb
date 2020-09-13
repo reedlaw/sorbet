@@ -467,6 +467,7 @@ class Opus::Types::Test::EdgeCasesTest < Critic::Unit::UnitTest
           def self.foo(arr)
             arr.map(&method(:bar))
           end
+
           def self.bar(x)
             -x
           end
@@ -712,6 +713,7 @@ class Opus::Types::Test::EdgeCasesTest < Critic::Unit::UnitTest
       def self.method_added(method)
         super(method)
       end
+
       def self.singleton_method_added(method)
         super(method)
       end
@@ -732,9 +734,11 @@ class Opus::Types::Test::EdgeCasesTest < Critic::Unit::UnitTest
       extend T::Sig
       sig {returns(Integer)}
       def foo; 1; end
+
       def self.method_added(method)
         super(method)
       end
+
       def self.singleton_method_added(method)
         super(method)
       end

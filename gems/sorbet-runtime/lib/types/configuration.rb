@@ -386,9 +386,11 @@ module T::Configuration
   def self.enable_legacy_t_enum_migration_mode
     @legacy_t_enum_migration_mode = true
   end
+
   def self.disable_legacy_t_enum_migration_mode
     @legacy_t_enum_migration_mode = false
   end
+
   def self.legacy_t_enum_migration_mode?
     @legacy_t_enum_migration_mode || false
   end
@@ -416,6 +418,7 @@ module T::Configuration
 
     @sealed_violation_whitelist = sealed_violation_whitelist
   end
+
   def self.sealed_violation_whitelist
     @sealed_violation_whitelist
   end

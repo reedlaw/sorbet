@@ -27,20 +27,6 @@ Layout/CaseIndentation:
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
-# Offense count: 22
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
-Layout/EmptyLineBetweenDefs:
-  Exclude:
-    - 'lib/types/configuration.rb'
-    - 'lib/types/private/methods/modes.rb'
-    - 'lib/types/props/_props.rb'
-    - 'lib/types/props/serializable.rb'
-    - 'test/test_helper.rb'
-    - 'test/types/abstract_validation.rb'
-    - 'test/types/edge_cases.rb'
-    - 'test/types/final_method.rb'
-
 # Offense count: 117
 # Cop supports --auto-correct.
 Layout/EmptyLines:
