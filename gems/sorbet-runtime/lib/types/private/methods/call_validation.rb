@@ -108,6 +108,7 @@ module T::Private::Methods::CallValidation
       T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
     end
 
+    # rubocop:disable Layout/EmptyLines
     # The following line breaks are intentional to show nice pry message
 
 
@@ -122,6 +123,8 @@ module T::Private::Methods::CallValidation
     # PRY note:
     # this code is sig validation code.
     # Please issue `finish` to step out of it
+    #
+    # rubocop:enable Layout/EmptyLines
 
     return_value = original_method.bind(instance).call(*args, &blk)
     if should_sample
@@ -252,6 +255,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -266,6 +270,8 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
 
       return_value = original_method.bind(self).call(&blk)
       if should_sample
@@ -337,6 +343,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -351,6 +358,8 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
 
       return_value = original_method.bind(self).call(arg0, &blk)
       if should_sample
@@ -434,6 +443,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -448,6 +458,8 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
 
       return_value = original_method.bind(self).call(arg0, arg1, &blk)
       if should_sample
@@ -543,6 +555,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -557,6 +570,8 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
 
       return_value = original_method.bind(self).call(arg0, arg1, arg2, &blk)
       if should_sample
@@ -665,6 +680,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -679,6 +695,8 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
 
       return_value = original_method.bind(self).call(arg0, arg1, arg2, arg3, &blk)
       if should_sample
@@ -766,6 +784,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -780,6 +799,8 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
 
       original_method.bind(self).call(&blk)
       T::Private::Types::Void::VOID
@@ -830,6 +851,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -844,6 +866,9 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
+
       original_method.bind(self).call(arg0, &blk)
       T::Private::Types::Void::VOID
     end
@@ -905,6 +930,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -919,6 +945,8 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
 
       original_method.bind(self).call(arg0, arg1, &blk)
       T::Private::Types::Void::VOID
@@ -993,6 +1021,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -1007,6 +1036,8 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
 
       original_method.bind(self).call(arg0, arg1, arg2, &blk)
       T::Private::Types::Void::VOID
@@ -1094,6 +1125,7 @@ module T::Private::Methods::CallValidation
         T::Profile.typecheck_duration += (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t1)
       end
 
+      # rubocop:disable Layout/EmptyLines
       # The following line breaks are intentional to show nice pry message
 
 
@@ -1108,6 +1140,8 @@ module T::Private::Methods::CallValidation
       # PRY note:
       # this code is sig validation code.
       # Please issue `finish` to step out of it
+      #
+      # rubocop:enable Layout/EmptyLines
 
       original_method.bind(self).call(arg0, arg1, arg2, arg3, &blk)
       T::Private::Types::Void::VOID
