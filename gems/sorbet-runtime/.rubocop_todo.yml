@@ -184,14 +184,6 @@ Layout/MultilineOperationIndentation:
     - 'lib/types/props/weak_constructor.rb'
     - 'lib/types/types/base.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentationWidth.
-# SupportedStyles: with_first_parameter, with_fixed_indentation
-Layout/ParameterAlignment:
-  Exclude:
-    - 'lib/types/private/methods/call_validation.rb'
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
