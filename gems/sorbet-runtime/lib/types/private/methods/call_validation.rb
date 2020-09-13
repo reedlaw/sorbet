@@ -584,7 +584,7 @@ module T::Private::Methods::CallValidation
   end
 
   def self.create_validator_method_fast4(mod, original_method, method_sig, return_type,
-      arg0_type, arg1_type, arg2_type, arg3_type)
+                                         arg0_type, arg1_type, arg2_type, arg3_type)
     mod.send(:define_method, method_sig.method_name) do |arg0, arg1, arg2, arg3, &blk|
       # This block is called for every `sig`. It's critical to keep it fast and
       # reduce number of allocations that happen here.
@@ -1013,7 +1013,7 @@ module T::Private::Methods::CallValidation
   end
 
   def self.create_validator_procedure_fast4(mod, original_method, method_sig,
-    arg0_type, arg1_type, arg2_type, arg3_type)
+                                            arg0_type, arg1_type, arg2_type, arg3_type)
     mod.send(:define_method, method_sig.method_name) do |arg0, arg1, arg2, arg3, &blk|
       # This block is called for every `sig`. It's critical to keep it fast and
       # reduce number of allocations that happen here.
