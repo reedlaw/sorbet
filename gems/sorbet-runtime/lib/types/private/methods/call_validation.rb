@@ -786,7 +786,6 @@ module T::Private::Methods::CallValidation
   end
 
   def self.create_validator_procedure_fast1(mod, original_method, method_sig, arg0_type)
-
     mod.send(:define_method, method_sig.method_name) do |arg0, &blk|
       # This block is called for every `sig`. It's critical to keep it fast and
       # reduce number of allocations that happen here.

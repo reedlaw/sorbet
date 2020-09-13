@@ -107,12 +107,6 @@ Layout/EmptyLinesAroundClassBody:
     - 'test/types/types.rb'
     - 'test/types/validate_override_types.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Layout/EmptyLinesAroundMethodBody:
-  Exclude:
-    - 'lib/types/private/methods/call_validation.rb'
-
 # Offense count: 9
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
