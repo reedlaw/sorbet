@@ -82,6 +82,8 @@ Metrics/BlockLength:
 # Offense count: 22
 # Configuration parameters: CountComments, CountAsOne.
 Metrics/ClassLength:
+  Exclude:
+    - 'test/**/*'
   Max: 1084
 
 # Offense count: 44
