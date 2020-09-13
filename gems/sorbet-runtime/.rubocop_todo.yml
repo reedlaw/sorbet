@@ -18,19 +18,6 @@ Gemspec/RequiredRubyVersion:
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 
-# Offense count: 117
-# Cop supports --auto-correct.
-Layout/EmptyLines:
-  Exclude:
-    - 'bench/constructor.rb'
-    - 'lib/types/_types.rb'
-    - 'lib/types/enum.rb'
-    - 'lib/types/private/methods/call_validation.rb'
-    - 'lib/types/private/methods/signature_validation.rb'
-    - 'lib/types/props/optional.rb'
-    - 'lib/types/props/serializable.rb'
-    - 'test/types/types.rb'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 # Configuration parameters: IndentationWidth.

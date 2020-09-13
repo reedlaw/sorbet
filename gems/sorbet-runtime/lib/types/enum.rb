@@ -126,9 +126,7 @@ class T::Enum
     self.from_serialized(mongo_value)
   end
 
-
   ## Enum instance methods ##
-
 
   sig {returns(T.self_type)}
   def dup
@@ -171,7 +169,6 @@ class T::Enum
       nil
     end
   end
-
 
   # NB: Do not call this method. This exists to allow for a safe migration path in places where enum
   # values are compared directly against string values.
@@ -238,9 +235,7 @@ class T::Enum
     )
   end
 
-
   ## Private implementation ##
-
 
   sig {params(serialized_val: SerializedVal).void}
   private def initialize(serialized_val=nil)
