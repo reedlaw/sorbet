@@ -12,7 +12,6 @@ module Opus::Types::Test
     end
 
     describe "declaration" do
-
       it "succeeds with untyped" do
         @mod.sig {params(bar: T.untyped).returns(T.untyped)}
         def @mod.foo(bar)
