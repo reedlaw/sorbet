@@ -68,8 +68,12 @@ ConstExprStr LSPTask::methodString() const {
             return "textDocument.documentSymbol";
         case LSPMethod::TextDocumentHover:
             return "textDocument.hover";
+        case LSPMethod::TextDocumentPrepareRename:
+            return "textDocument.prepareRename";
         case LSPMethod::TextDocumentReferences:
             return "textDocument.references";
+        case LSPMethod::TextDocumentRename:
+            return "textDocument.rename";
         case LSPMethod::TextDocumentSignatureHelp:
             return "textDocument.signatureHelp";
         case LSPMethod::TextDocumentTypeDefinition:
