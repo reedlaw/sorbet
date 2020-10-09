@@ -831,7 +831,21 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                     for (auto &err : it->main.errors) {
                         ctx.state._error(std::move(err));
                     }
+
+                    // // TODO(jez) This is a huge hack. I have no idea why the `exists()` and
+                    // `isMethod()` checks are not always true. We should not land this change until
+                    // changing sorbet so that those are always true, or having good reasons for why
+                    // they are false sometimes.
+                    if (it->main.method.exists() && it->main.method.data(ctx)->isMethod() &&
+                        it->main.method.data(ctx)->isPrivate() && !send->isPrivateOk) {
+                        // if (it->main.method.data(ctx)->isPrivate() && !send->isPrivateOk) {
+                        if (auto e = ctx.beginError(bind.loc, core::errors::Infer::PrivateMethod)) {
+                            e.setHeader("Non-private call to private method `{}`", it->main.method.show(ctx));
+                        }
+                    }
+
                     lspQueryMatch = lspQueryMatch || lspQuery.matchesSymbol(it->main.method);
+
                     it = it->secondary.get();
                 }
                 shared_ptr<core::DispatchResult> retainedResult;

@@ -504,6 +504,10 @@ TreePtr node2TreeImpl(DesugarContext dctx, unique_ptr<parser::Node> what) {
                 Send::Flags flags;
                 auto rec = node2TreeImpl(dctx, std::move(send->receiver));
                 if (isa_tree<EmptyTree>(rec)) {
+                    // TODO(jez) In Ruby 2.7 `self.foo()` is also allowed for private method calls,
+                    // not only `foo()`. We should pre-emptively allow the new syntax, but this only
+                    // supports the 2.6 syntax.
+
                     // 0-sized Loc, since `self.` doesn't appear in the original file.
                     rec = MK::Self(loc.copyWithZeroLength());
                     flags.isPrivateOk = true;
@@ -535,6 +539,8 @@ TreePtr node2TreeImpl(DesugarContext dctx, unique_ptr<parser::Node> what) {
                     sendargs.emplace_back(std::move(method));
                     sendargs.emplace_back(std::move(args));
                     TreePtr res;
+                    // TODO(jez) These magic callWith* methods should all inherit the `Send::Flags
+                    // flags` that we created and populated above. Right now we're dropping them.
                     if (block == nullptr) {
                         res = MK::Send(loc, MK::Constant(loc, core::Symbols::Magic()), core::Names::callWithSplat(),
                                        std::move(sendargs), {});
@@ -584,6 +590,8 @@ TreePtr node2TreeImpl(DesugarContext dctx, unique_ptr<parser::Node> what) {
                                 sendargs.emplace_back(std::move(arg));
                             }
 
+                            // TODO(jez) ditto passing the flags
+                            // TODO(jez) honestly, probably just want to grep for `MK::Send` everywhere and check flags
                             res = MK::Send(loc, MK::Constant(loc, core::Symbols::Magic()), core::Names::callWithBlock(),
                                            std::move(sendargs), {});
                         }
@@ -1712,6 +1720,9 @@ TreePtr node2TreeImpl(DesugarContext dctx, unique_ptr<parser::Node> what) {
                 }
                 auto res =
                     MK::Send(loc, MK::Constant(loc, core::Symbols::Kernel()), core::Names::undef(), std::move(args));
+                // It wasn't a Send to begin with--there's no way this could result in a private
+                // method call error.
+                ast::cast_tree_nonnull<ast::Send>(res).flags.isPrivateOk = true;
                 result = std::move(res);
             },
             [&](parser::Backref *backref) {

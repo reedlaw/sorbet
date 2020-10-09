@@ -249,6 +249,9 @@ public:
         Exception::raise("Should not happen");
     }
 
+    // TODO(jez) We should rename these `isMethod{Public,Protected,Private}` for consistency.  There
+    // are also private constants, and these methods should not handle checking whether a constant
+    // is private.
     inline bool isPublic() const {
         ENFORCE_NO_TIMER(isMethod());
         return !isProtected() && !isPrivate();

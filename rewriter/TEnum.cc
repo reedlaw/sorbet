@@ -143,11 +143,13 @@ vector<ast::TreePtr> processStat(core::MutableContext ctx, ast::ClassDef *klass,
         args.emplace_back(std::move(arg));
     }
 
-    auto singletonAsgn = ast::MK::Assign(
-        stat->loc, std::move(asgn->lhs),
-        ast::MK::Send2(stat->loc, ast::MK::Constant(stat->loc, core::Symbols::T()), core::Names::uncheckedLet(),
-                       ast::MK::Send(stat->loc, classCnst.deepCopy(), core::Names::new_(), std::move(args)),
-                       std::move(classCnst)));
+    // TODO(jez) Instead of cast_tree_nonnull we should pass the flags into the MK::Send call, I
+    // forgot about that for this first prototype.
+    auto new_ = ast::MK::Send(stat->loc, classCnst.deepCopy(), core::Names::new_(), std::move(args));
+    ast::cast_tree_nonnull<ast::Send>(new_).flags.isPrivateOk = true;
+    auto singletonAsgn = ast::MK::Assign(stat->loc, std::move(asgn->lhs),
+                                         ast::MK::Send2(stat->loc, ast::MK::Constant(stat->loc, core::Symbols::T()),
+                                                        core::Names::uncheckedLet(), move(new_), std::move(classCnst)));
 
     vector<ast::TreePtr> result;
     result.emplace_back(std::move(classDef));
