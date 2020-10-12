@@ -214,12 +214,12 @@ void checkServerCapabilities(const ServerCapabilities &capabilities) {
     CHECK(capabilities.documentSymbolProvider.value_or(false));
     CHECK(capabilities.workspaceSymbolProvider.value_or(false));
     CHECK(capabilities.codeActionProvider.has_value());
+    CHECK(capabilities.renameProvider.has_value());
     CHECK_FALSE(capabilities.codeLensProvider.has_value());
     CHECK_FALSE(capabilities.documentFormattingProvider.has_value());
     CHECK_FALSE(capabilities.documentRangeFormattingProvider.has_value());
     CHECK_FALSE(capabilities.documentRangeFormattingProvider.has_value());
     CHECK_FALSE(capabilities.documentOnTypeFormattingProvider.has_value());
-    CHECK_FALSE(capabilities.renameProvider.has_value());
     CHECK_FALSE(capabilities.documentLinkProvider.has_value());
     CHECK_FALSE(capabilities.executeCommandProvider.has_value());
     CHECK_FALSE(capabilities.workspace.has_value());
