@@ -215,6 +215,12 @@ string applyEdit(string_view source, const core::File &file, const Range &range,
     return actualEditedFileContents;
 }
 
+string updatedFilePath(string filename, string version) {
+    size_t index = filename.rfind('.', filename.length());
+    string fileExtension = filename.substr(index, filename.size() - 1);
+
+    return fmt::format("{}.{}.rbedited", filename.substr(0, filename.size() - fileExtension.size()), version);
+}
 } // namespace
 
 RangeAssertion::RangeAssertion(string_view filename, unique_ptr<Range> &range, int assertionLine)
@@ -1205,8 +1211,7 @@ void ApplyCompletionAssertion::check(const UnorderedMap<std::string, std::shared
     }
     auto &file = it->second;
 
-    auto expectedUpdatedFilePath =
-        fmt::format("{}.{}.rbedited", this->filename.substr(0, this->filename.size() - strlen(".rb")), this->version);
+    auto expectedUpdatedFilePath = updatedFilePath(this->filename, this->version);
 
     string expectedEditedFileContents;
     try {
@@ -1289,8 +1294,7 @@ void ApplyRenameAssertion::check(const UnorderedMap<std::string, std::shared_ptr
     }
     auto &file = it->second;
 
-    auto expectedUpdatedFilePath =
-        fmt::format("{}.{}.rbedited", this->filename.substr(0, this->filename.size() - strlen(".rb")), this->version);
+    auto expectedUpdatedFilePath = updatedFilePath(this->filename, this->version);
 
     string expectedEditedFileContents;
     try {
@@ -1361,8 +1365,7 @@ void ApplyCodeActionAssertion::check(const UnorderedMap<std::string, std::shared
         }
         auto &file = it->second;
 
-        auto expectedUpdatedFilePath =
-            fmt::format("{}.{}.rbedited", filename.substr(0, filename.size() - strlen(".rb")), version);
+        auto expectedUpdatedFilePath = updatedFilePath(this->filename, this->version);
         string expectedEditedFileContents;
         try {
             expectedEditedFileContents = FileOps::read(expectedUpdatedFilePath);
