@@ -1,5 +1,6 @@
 #include "absl/synchronization/mutex.h"
 #include "absl/synchronization/notification.h"
+#include "common/EarlyReturnWithCode.h"
 #include "common/Timer.h"
 #include "common/web_tracer_framework/tracing.h"
 #include "core/lsp/TypecheckEpochManager.h"
@@ -9,7 +10,6 @@
 #include "main/lsp/json_types.h"
 #include "main/lsp/lsp.h"
 #include "main/lsp/watchman/WatchmanProcess.h"
-#include "main/options/options.h" // For EarlyReturnWithCode.
 
 using namespace std;
 namespace spd = spdlog;
@@ -120,7 +120,7 @@ optional<unique_ptr<core::GlobalState>> LSPLoop::runLSP(shared_ptr<LSPInput> inp
         if (opts.rawInputDirNames.size() != 1 || !opts.rawInputFileNames.empty()) {
             logger->error("Watchman support currently only works when Sorbet is run with a single input directory. If "
                           "Watchman is not needed, run Sorbet with `--disable-watchman`.");
-            throw options::EarlyReturnWithCode(1);
+            throw EarlyReturnWithCode(1);
         }
 
         // The lambda below intentionally does not capture `this`.
@@ -208,7 +208,7 @@ optional<unique_ptr<core::GlobalState>> LSPLoop::runLSP(shared_ptr<LSPInput> inp
                     if (taskQueue->errorCode != 0) {
                         // Abnormal termination. Exit immediately.
                         typecheckerCoord.shutdown();
-                        throw options::EarlyReturnWithCode(taskQueue->errorCode);
+                        throw EarlyReturnWithCode(taskQueue->errorCode);
                     } else if (taskQueue->pendingTasks.empty()) {
                         // Normal termination. Wait until all pending requests finish.
                         break;

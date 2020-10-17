@@ -18,7 +18,7 @@ namespace {
 string getRootPath(const options::Options &opts, const shared_ptr<spdlog::logger> &logger) {
     if (opts.rawInputDirNames.size() != 1) {
         logger->error("Sorbet's language server requires a single input directory.");
-        throw options::EarlyReturnWithCode(1);
+        throw EarlyReturnWithCode(1);
     }
     return opts.rawInputDirNames.at(0);
 }

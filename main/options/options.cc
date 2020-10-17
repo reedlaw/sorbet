@@ -946,7 +946,4 @@ void readOptions(Options &opts,
     }
 }
 
-EarlyReturnWithCode::EarlyReturnWithCode(int returnCode)
-    : SorbetException("early return with code " + to_string(returnCode)), returnCode(returnCode){};
-
 } // namespace sorbet::realmain::options
