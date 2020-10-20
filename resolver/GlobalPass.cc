@@ -168,7 +168,7 @@ void resolveTypeMembers(core::GlobalState &gs, core::SymbolRef sym,
                 ENFORCE(lambdaParam != nullptr);
 
                 lambdaParam->lowerBound = core::Types::bottom();
-                lambdaParam->upperBound = sym.data(gs)->externalType(gs);
+                lambdaParam->upperBound = sym.data(gs)->unsafeComputeExternalType(gs);
             }
         }
     }
