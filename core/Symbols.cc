@@ -59,7 +59,7 @@ TypePtr Symbol::externalType() const {
     return resultType;
 }
 
-TypePtr Symbol::unsafeComputeExternalType(const GlobalState &gs) {
+TypePtr Symbol::unsafeComputeExternalType(GlobalState &gs) {
     ENFORCE_NO_TIMER(isClassOrModule());
     if (resultType) {
         return resultType;
