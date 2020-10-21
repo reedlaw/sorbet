@@ -2383,9 +2383,12 @@ ast::ParsedFilesOrCancelled Resolver::run(core::GlobalState &gs, vector<ast::Par
         return ast::ParsedFilesOrCancelled();
     }
 
-    // Ensure all symbols have `externalType` computed.
-    for (u4 i = 1; i < gs.classAndModulesUsed(); i++) {
-        core::SymbolRef(gs, core::SymbolRef::Kind::ClassOrModule, i).data(gs)->unsafeComputeExternalType(gs);
+    {
+        Timer timeit(gs.tracer(), "resolver.computeExternalType");
+        // Ensure all symbols have `externalType` computed.
+        for (u4 i = 1; i < gs.classAndModulesUsed(); i++) {
+            core::SymbolRef(gs, core::SymbolRef::Kind::ClassOrModule, i).data(gs)->unsafeComputeExternalType(gs);
+        }
     }
 
     result = resolveSigs(gs, std::move(trees));
