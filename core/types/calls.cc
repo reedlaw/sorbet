@@ -1039,7 +1039,7 @@ namespace {
 class T_untyped : public IntrinsicMethod {
 public:
     void apply(const GlobalState &gs, DispatchArgs args, const Type *thisType, DispatchResult &res) const override {
-        res.returnType = Types::untypedUntracked();
+        res.returnType = make_type<MetaType>(Types::untypedUntracked());
     }
 } T_untyped;
 
