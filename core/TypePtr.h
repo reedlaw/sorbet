@@ -45,6 +45,8 @@ public:
     friend class Symbol;
 
     template <class T, class... Args> friend TypePtr make_type(Args &&... args);
+
+    std::string toString(const GlobalState &gs) const;
 };
 CheckSize(TypePtr, 16, 8);
 } // namespace sorbet::core
