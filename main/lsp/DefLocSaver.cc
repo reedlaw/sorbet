@@ -30,7 +30,7 @@ ast::TreePtr DefLocSaver::postTransformMethodDef(core::Context ctx, ast::TreePtr
             // localExp should never be null, but guard against the possibility.
             if (localExp && lspQuery.matchesLoc(core::Loc(ctx.file, localExp->loc))) {
                 tp.type = argType.type;
-                tp.origins.emplace_back(core::Loc(ctx.file, localExp->loc));
+                tp.origins.emplace_back(core::Loc(ctx.file, localExp->loc), false);
                 core::lsp::QueryResponse::pushQueryResponse(
                     ctx, core::lsp::IdentResponse(core::Loc(ctx.file, localExp->loc), localExp->localVariable, tp,
                                                   methodDef.symbol));
@@ -39,7 +39,7 @@ ast::TreePtr DefLocSaver::postTransformMethodDef(core::Context ctx, ast::TreePtr
         }
 
         tp.type = symbolData->resultType;
-        tp.origins.emplace_back(methodDef.declLoc);
+        tp.origins.emplace_back(methodDef.declLoc, false);
         core::lsp::QueryResponse::pushQueryResponse(
             ctx, core::lsp::DefinitionResponse(methodDef.symbol, methodDef.declLoc, methodDef.name, tp));
     }
@@ -68,7 +68,7 @@ ast::TreePtr DefLocSaver::postTransformUnresolvedIdent(core::Context ctx, ast::T
         if (sym.exists() && (lspQuery.matchesSymbol(sym) || lspQuery.matchesLoc(core::Loc(ctx.file, id.loc)))) {
             core::TypeAndOrigins tp;
             tp.type = sym.data(ctx)->resultType;
-            tp.origins.emplace_back(sym.data(ctx)->loc());
+            tp.origins.emplace_back(sym.data(ctx)->loc(), false);
             core::lsp::QueryResponse::pushQueryResponse(
                 ctx, core::lsp::FieldResponse(sym, core::Loc(ctx.file, id.loc), id.name, tp));
         }
@@ -83,7 +83,7 @@ void matchesQuery(core::Context ctx, ast::ConstantLit *lit, const core::lsp::Que
         if (lspQuery.matchesLoc(core::Loc(ctx.file, lit->loc)) || lspQuery.matchesSymbol(symbol)) {
             // This basically approximates the cfg::Alias case from Environment::processBinding.
             core::TypeAndOrigins tp;
-            tp.origins.emplace_back(symbol.data(ctx)->loc());
+            tp.origins.emplace_back(symbol.data(ctx)->loc(), false);
 
             if (symbol.data(ctx)->isClassOrModule()) {
                 tp.type = symbol.data(ctx)->lookupSingletonClass(ctx).data(ctx)->externalType(ctx);

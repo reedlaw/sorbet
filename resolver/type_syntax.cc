@@ -853,7 +853,7 @@ TypeSyntax::ResultType getResultTypeAndBindWithSelfTypeParams(core::MutableConte
             holders.reserve(s->args.size());
             for (auto &arg : s->args) {
                 core::TypeAndOrigins ty;
-                ty.origins.emplace_back(core::Loc(ctx.file, arg->loc));
+                ty.origins.emplace_back(core::Loc(ctx.file, arg->loc), false);
                 ty.type = core::make_type<core::MetaType>(
                     getResultTypeWithSelfTypeParams(ctx, arg, sigBeingParsed, args.withoutSelfType()));
                 holders.emplace_back(make_unique<core::TypeAndOrigins>(move(ty)));
