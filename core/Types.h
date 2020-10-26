@@ -663,22 +663,10 @@ public:
     std::shared_ptr<SendAndBlockLink> duplicate();
 };
 
-class TypeOrigin final {
-public:
-    TypeOrigin(const Loc &l, bool uninit) : loc(l), becauseUninitialized(uninit) {}
-    Loc loc;
-    bool becauseUninitialized;
-
-    bool operator==(const TypeOrigin &rhs) const {
-        return this->loc == rhs.loc && this->becauseUninitialized == rhs.becauseUninitialized;
-    }
-};
-CheckSize(TypeOrigin, 16, 4);
-
 class TypeAndOrigins final {
 public:
     TypePtr type;
-    InlinedVector<TypeOrigin, 1> origins;
+    InlinedVector<Loc, 1> origins;
     std::vector<ErrorLine> origins2Explanations(const GlobalState &gs) const;
     ~TypeAndOrigins() noexcept;
     TypeAndOrigins() = default;

@@ -7,23 +7,15 @@ namespace sorbet::core {
 // This sorts the underlying `origins`
 vector<ErrorLine> TypeAndOrigins::origins2Explanations(const GlobalState &gs) const {
     vector<ErrorLine> result;
-    auto compare = [](TypeOrigin left, TypeOrigin right) {
-        // If "nil because uninitialized" is present, the list will read best if it goes last.
-        if (!left.becauseUninitialized && right.becauseUninitialized) {
-            return true;
+    auto compare = [](Loc left, Loc right) {
+        if (left.file() != right.file()) {
+            return left.file().id() < right.file().id();
         }
-        if (left.becauseUninitialized && !right.becauseUninitialized) {
-            return false;
+        if (left.beginPos() != right.beginPos()) {
+            return left.beginPos() < right.beginPos();
         }
-
-        if (left.loc.file() != right.loc.file()) {
-            return left.loc.file().id() < right.loc.file().id();
-        }
-        if (left.loc.beginPos() != right.loc.beginPos()) {
-            return left.loc.beginPos() < right.loc.beginPos();
-        }
-        if (left.loc.endPos() != right.loc.endPos()) {
-            return left.loc.endPos() < right.loc.endPos();
+        if (left.endPos() != right.endPos()) {
+            return left.endPos() < right.endPos();
         }
         return false;
     };
@@ -31,15 +23,11 @@ vector<ErrorLine> TypeAndOrigins::origins2Explanations(const GlobalState &gs) co
     fast_sort(sortedOrigins, compare);
     Loc last;
     for (auto o : sortedOrigins) {
-        if (o.loc == last) {
+        if (o == last) {
             continue;
         }
-        last = o.loc;
-        ErrorLine errorLine =
-            o.becauseUninitialized
-                ? ErrorLine::from(o.loc, "Variable may be `{}`, because it is not necessarily initialized here:", "nil")
-                : ErrorLine(o.loc, "");
-        result.emplace_back(errorLine);
+        last = o;
+        result.emplace_back(o, "");
     }
     return result;
 }

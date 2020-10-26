@@ -150,9 +150,9 @@ u4 locSize(core::Loc loc) {
 // Used to ignore origins that are not relevant to call site.
 core::Loc smallestLocWithin(core::Loc callLoc, const core::TypeAndOrigins &argTpe) {
     core::Loc chosen = callLoc;
-    for (auto origin : argTpe.origins) {
-        if (callLoc.contains(origin.loc) && locSize(origin.loc) < locSize(chosen)) {
-            chosen = origin.loc;
+    for (auto loc : argTpe.origins) {
+        if (callLoc.contains(loc) && locSize(loc) < locSize(chosen)) {
+            chosen = loc;
         }
     }
     return chosen;
@@ -1452,7 +1452,7 @@ private:
         for (auto &arg : tuple->elems) {
             TypeAndOrigins tao;
             tao.type = arg;
-            tao.origins.emplace_back(argsLoc, false);
+            tao.origins.emplace_back(argsLoc);
             sendArgStore.emplace_back(std::move(tao));
         }
         InlinedVector<const TypeAndOrigins *, 2> sendArgs;
@@ -2220,7 +2220,7 @@ public:
             args.locs.call,
             argLocs,
         };
-        TypeAndOrigins myType{args.selfType, {{core::Loc(args.locs.file, args.locs.receiver), false}}};
+        TypeAndOrigins myType{args.selfType, {core::Loc(args.locs.file, args.locs.receiver)}};
         InlinedVector<const TypeAndOrigins *, 2> innerArgs{&myType};
 
         DispatchArgs dispatch{

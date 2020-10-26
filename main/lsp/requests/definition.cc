@@ -29,7 +29,7 @@ unique_ptr<ResponseMessage> DefinitionTask::runRequest(LSPTypecheckerDelegate &t
             if (resp->isConstant() || resp->isField() || (fileIsTyped && (resp->isIdent() || resp->isLiteral()))) {
                 auto retType = resp->getTypeAndOrigins();
                 for (auto &originLoc : retType.origins) {
-                    addLocIfExists(gs, result, originLoc.loc);
+                    addLocIfExists(gs, result, originLoc);
                 }
             } else if (fileIsTyped && resp->isDefinition()) {
                 addLocIfExists(gs, result, resp->isDefinition()->termLoc);

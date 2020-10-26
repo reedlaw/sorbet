@@ -689,7 +689,7 @@ void Environment::assumeKnowledge(core::Context ctx, bool isTrue, cfg::LocalRef 
         }
 
         core::TypeAndOrigins tp = getTypeAndOrigin(ctx, cond);
-        tp.origins.emplace_back(loc, false);
+        tp.origins.emplace_back(loc);
         if (tp.type->isUntyped()) {
             tp.type = core::Types::falsyTypes();
         } else {
@@ -702,7 +702,7 @@ void Environment::assumeKnowledge(core::Context ctx, bool isTrue, cfg::LocalRef 
         setTypeAndOrigin(cond, tp);
     } else {
         core::TypeAndOrigins tp = getTypeAndOrigin(ctx, cond);
-        tp.origins.emplace_back(loc, false);
+        tp.origins.emplace_back(loc);
         tp.type = core::Types::dropSubtypesOf(ctx, core::Types::dropSubtypesOf(ctx, tp.type, core::Symbols::NilClass()),
                                               core::Symbols::FalseClass());
         if (tp.type->isBottom()) {
@@ -728,7 +728,7 @@ void Environment::assumeKnowledge(core::Context ctx, bool isTrue, cfg::LocalRef 
         core::TypeAndOrigins tp = getTypeAndOrigin(ctx, typeTested.first);
         auto glbbed = core::Types::all(ctx, tp.type, typeTested.second);
         if (tp.type != glbbed) {
-            tp.origins.emplace_back(loc, false);
+            tp.origins.emplace_back(loc);
             tp.type = glbbed;
         }
         setTypeAndOrigin(typeTested.first, tp);
@@ -743,7 +743,7 @@ void Environment::assumeKnowledge(core::Context ctx, bool isTrue, cfg::LocalRef 
             continue;
         }
         core::TypeAndOrigins tp = getTypeAndOrigin(ctx, typeTested.first);
-        tp.origins.emplace_back(loc, false);
+        tp.origins.emplace_back(loc);
 
         if (!tp.type->isUntyped()) {
             tp.type = core::Types::approximateSubtract(ctx, tp.type, typeTested.second);
@@ -1008,7 +1008,7 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
 
                     send->link->result = move(retainedResult);
                 }
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
             },
             [&](cfg::Ident *i) {
                 const core::TypeAndOrigins &typeAndOrigin = getTypeAndOrigin(ctx, i->what);
@@ -1030,7 +1030,7 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                     auto singletonClass = data->lookupSingletonClass(ctx);
                     ENFORCE(singletonClass.exists(), "Every class should have a singleton class by now.");
                     tp.type = singletonClass.data(ctx)->externalType(ctx);
-                    tp.origins.emplace_back(symbol.data(ctx)->loc(), false);
+                    tp.origins.emplace_back(symbol.data(ctx)->loc());
                 } else if (data->isField() || (data->isStaticField() && !data->isTypeAlias()) || data->isTypeMember()) {
                     if (data->resultType.get() != nullptr) {
                         if (data->isTypeMember()) {
@@ -1051,14 +1051,14 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                         } else {
                             tp.type = data->resultType;
                         }
-                        tp.origins.emplace_back(data->loc(), false);
+                        tp.origins.emplace_back(data->loc());
                     } else {
-                        tp.origins.emplace_back(core::Loc::none(), false);
+                        tp.origins.emplace_back(core::Loc::none());
                         tp.type = core::Types::untyped(ctx, symbol);
                     }
                 } else if (data->isTypeAlias()) {
                     ENFORCE(data->resultType.get() != nullptr);
-                    tp.origins.emplace_back(data->loc(), false);
+                    tp.origins.emplace_back(data->loc());
                     tp.type = core::make_type<core::MetaType>(data->resultType);
                 } else {
                     Exception::notImplemented();
@@ -1082,7 +1082,7 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                 }
                 type = flatmapHack(ctx, i->link->result->main.receiver, type, i->link->fun);
                 tp.type = std::move(type);
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
             },
             [&](cfg::LoadArg *i) {
                 /* read type from info filled by define_method */
@@ -1100,7 +1100,7 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
 
                 auto argType = i->argument(ctx).argumentTypeAsSeenByImplementation(ctx, constr);
                 tp.type = std::move(argType);
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
             },
             [&](cfg::ArgPresent *i) {
                 // Return an unanalyzable boolean value that indicates whether or not arg was provided
@@ -1108,7 +1108,7 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                 ENFORCE(ctx.owner == i->method);
 
                 tp.type = core::Types::Boolean();
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
             },
             [&](cfg::LoadYieldParams *insn) {
                 ENFORCE(insn->link);
@@ -1133,11 +1133,11 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                 } else {
                     tp.type = params;
                 }
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
             },
             [&](cfg::Return *i) {
                 tp.type = core::Types::bottom();
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
 
                 const core::TypeAndOrigins &typeAndOrigin = getAndFillTypeAndOrigin(ctx, i->what);
                 if (core::Types::isSubType(ctx, core::Types::void_(), methodReturnType)) {
@@ -1193,11 +1193,11 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                 }
 
                 tp.type = core::Types::bottom();
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
             },
             [&](cfg::Literal *i) {
                 tp.type = i->value;
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
 
                 if (lspQueryMatch) {
                     core::lsp::QueryResponse::pushQueryResponse(
@@ -1218,17 +1218,17 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                 }
 
                 tp.type = core::Types::bottom();
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
             },
             [&](cfg::GetCurrentException *i) {
                 tp.type = core::Types::untypedUntracked();
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
             },
             [&](cfg::LoadSelf *l) {
                 ENFORCE(l->link);
                 if (l->link->result->main.blockSpec.rebind.exists()) {
                     tp.type = l->link->result->main.blockSpec.rebind.data(ctx)->externalType(ctx);
-                    tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                    tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
 
                 } else {
                     tp = getTypeAndOrigin(ctx, l->fallback);
@@ -1240,7 +1240,7 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                                                          klass.data(ctx)->selfTypeArgs(ctx));
 
                 tp.type = castType;
-                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc), false);
+                tp.origins.emplace_back(core::Loc(ctx.file, bind.loc));
 
                 if (!hasType(ctx, bind.bind.variable)) {
                     noLoopChecking = true;
@@ -1364,11 +1364,10 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                                     // assignment. This is not necessarily
                                     // correct if the variable came from some
                                     // other source (e.g. a function argument)
-                                    auto suggest = core::Types::any(
-                                        ctx, dropConstructor(ctx, tp.origins[0].loc, tp.type), cur.type);
-                                    e.replaceWith(fmt::format("Initialize as `{}`", suggest->show(ctx)),
-                                                  cur.origins[0].loc, "T.let({}, {})", cur.origins[0].loc.source(ctx),
-                                                  suggest->show(ctx));
+                                    auto suggest =
+                                        core::Types::any(ctx, dropConstructor(ctx, tp.origins[0], tp.type), cur.type);
+                                    e.replaceWith(fmt::format("Initialize as `{}`", suggest->show(ctx)), cur.origins[0],
+                                                  "T.let({}, {})", cur.origins[0].source(ctx), suggest->show(ctx));
                                 } else {
                                     e.addErrorSection(
                                         core::ErrorSection("Original type from:", cur.origins2Explanations(ctx)));
@@ -1430,7 +1429,7 @@ void Environment::setUninitializedVarsToNil(const core::Context &ctx, core::Loc 
     for (auto &uninitialized : _vars) {
         if (uninitialized.second.typeAndOrigins.type.get() == nullptr) {
             uninitialized.second.typeAndOrigins.type = core::Types::nilClass();
-            uninitialized.second.typeAndOrigins.origins.emplace_back(origin, true);
+            uninitialized.second.typeAndOrigins.origins.emplace_back(origin);
         } else {
             uninitialized.second.typeAndOrigins.type->sanityCheck(ctx);
         }
@@ -1444,7 +1443,7 @@ core::TypeAndOrigins nilTypesWithOriginWithLoc(core::Loc loc) {
     // ENFORCE(loc.exists());
     core::TypeAndOrigins ret;
     ret.type = core::Types::nilClass();
-    ret.origins.emplace_back(loc, true);
+    ret.origins.emplace_back(loc);
     return ret;
 }
 } // namespace

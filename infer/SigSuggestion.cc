@@ -79,7 +79,7 @@ void extractSendArgumentKnowledge(core::Context ctx, core::LocOffsets bindLoc, c
     for (cfg::VariableUseSite &arg : snd->args) {
         auto &t = typeAndOriginsOwner.emplace_back(make_unique<core::TypeAndOrigins>());
         t->type = arg.type;
-        t->origins.emplace_back(core::Loc::none(), false);
+        t->origins.emplace_back(core::Loc::none());
         args.emplace_back(t.get());
     }
 

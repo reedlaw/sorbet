@@ -54,7 +54,7 @@ unique_ptr<ResponseMessage> HoverTask::runRequest(LSPTypecheckerDelegate &typech
         if (resp->isConstant() || resp->isField() || resp->isDefinition()) {
             auto origins = resp->getTypeAndOrigins().origins;
             if (!origins.empty()) {
-                auto loc = origins[0].loc;
+                auto loc = origins[0];
                 if (loc.exists()) {
                     documentation = findDocumentation(loc.file().data(gs).source(), loc.beginPos());
                 }
