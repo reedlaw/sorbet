@@ -8,10 +8,12 @@ namespace sorbet::core {
 vector<ErrorLine> TypeAndOrigins::origins2Explanations(const GlobalState &gs, const Loc &locForUninitialized) const {
     vector<ErrorLine> result;
 
-    std::cout << "location we are assuming for uninitialized:" << std::endl
-              << locForUninitialized.toString(gs) << std::endl;
-
     auto compare = [&locForUninitialized](Loc left, Loc right) {
+        // If the location matches "locForUninitialized", this means that the
+        // type may beNilClass, originating from a variable that is
+        // uninitialized within the method pointed to by locForUninitialized.
+        // We will issue a special explanation for that case, which is easier
+        // to understand if it comes last.
         if (left == locForUninitialized && right != locForUninitialized) {
             return false;
         }
