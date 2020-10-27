@@ -5,9 +5,20 @@ using namespace std;
 namespace sorbet::core {
 
 // This sorts the underlying `origins`
-vector<ErrorLine> TypeAndOrigins::origins2Explanations(const GlobalState &gs) const {
+vector<ErrorLine> TypeAndOrigins::origins2Explanations(const GlobalState &gs, const Loc &locForUninitialized) const {
     vector<ErrorLine> result;
-    auto compare = [](Loc left, Loc right) {
+
+    std::cout << "location we are assuming for uninitialized:" << std::endl
+              << locForUninitialized.toString(gs) << std::endl;
+
+    auto compare = [&locForUninitialized](Loc left, Loc right) {
+        if (left == locForUninitialized && right != locForUninitialized) {
+            return false;
+        }
+        if (left != locForUninitialized && right == locForUninitialized) {
+            return true;
+        }
+
         if (left.file() != right.file()) {
             return left.file().id() < right.file().id();
         }
@@ -27,7 +38,14 @@ vector<ErrorLine> TypeAndOrigins::origins2Explanations(const GlobalState &gs) co
             continue;
         }
         last = o;
-        result.emplace_back(o, "");
+
+        if (o == locForUninitialized) {
+            result.emplace_back(ErrorLine::from(
+                o, "Type may be `{}` since it depends on variables that are not necessarily initialized here:",
+                "NilClass"));
+        } else {
+            result.emplace_back(o, "");
+        }
     }
     return result;
 }

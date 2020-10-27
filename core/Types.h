@@ -667,7 +667,7 @@ class TypeAndOrigins final {
 public:
     TypePtr type;
     InlinedVector<Loc, 1> origins;
-    std::vector<ErrorLine> origins2Explanations(const GlobalState &gs) const;
+    std::vector<ErrorLine> origins2Explanations(const GlobalState &gs, const Loc &locForUninitialized) const;
     ~TypeAndOrigins() noexcept;
     TypeAndOrigins() = default;
     TypeAndOrigins(const TypeAndOrigins &) = default;
@@ -679,6 +679,7 @@ CheckSize(TypeAndOrigins, 40, 8);
 
 struct CallLocs final {
     FileRef file;
+    Loc ownerLoc;
     LocOffsets call;
     LocOffsets receiver;
     InlinedVector<LocOffsets, 2> &args;

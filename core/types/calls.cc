@@ -160,7 +160,8 @@ core::Loc smallestLocWithin(core::Loc callLoc, const core::TypeAndOrigins &argTp
 
 unique_ptr<Error> matchArgType(const GlobalState &gs, TypeConstraint &constr, Loc callLoc, Loc receiverLoc,
                                SymbolRef inClass, SymbolRef method, const TypeAndOrigins &argTpe, const ArgInfo &argSym,
-                               const TypePtr &selfType, vector<TypePtr> &targs, Loc loc, bool mayBeSetter = false) {
+                               const TypePtr &selfType, vector<TypePtr> &targs, Loc loc, Loc ownerLoc,
+                               bool mayBeSetter = false) {
     TypePtr expectedType = Types::resultTypeAsSeenFrom(gs, argSym.type, method.data(gs)->owner, inClass, targs);
     if (!expectedType) {
         expectedType = Types::untyped(gs, method);
@@ -184,8 +185,8 @@ unique_ptr<Error> matchArgType(const GlobalState &gs, TypeConstraint &constr, Lo
                                 argSym.argumentName(gs), expectedType->show(gs)),
             }));
         }
-        e.addErrorSection(
-            ErrorSection("Got " + argTpe.type->show(gs) + " originating from:", argTpe.origins2Explanations(gs)));
+        e.addErrorSection(ErrorSection("Got " + argTpe.type->show(gs) + " originating from:",
+                                       argTpe.origins2Explanations(gs, ownerLoc)));
         auto withoutNil = Types::approximateSubtract(gs, argTpe.type, Types::nilClass());
         if (!withoutNil->isBottom() &&
             Types::isSubTypeUnderConstraint(gs, constr, withoutNil, expectedType, UntypedMode::AlwaysCompatible)) {
@@ -667,10 +668,10 @@ DispatchResult dispatchCallSymbol(const GlobalState &gs, DispatchArgs args,
         }
 
         auto offset = ait - args.args.begin();
-        if (auto e =
-                matchArgType(gs, *constr, core::Loc(args.locs.file, args.locs.call),
-                             core::Loc(args.locs.file, args.locs.receiver), symbol, method, *arg, spec, args.selfType,
-                             targs, core::Loc(args.locs.file, args.locs.args[offset]), args.args.size() == 1)) {
+        if (auto e = matchArgType(gs, *constr, core::Loc(args.locs.file, args.locs.call),
+                                  core::Loc(args.locs.file, args.locs.receiver), symbol, method, *arg, spec,
+                                  args.selfType, targs, core::Loc(args.locs.file, args.locs.args[offset]),
+                                  args.locs.ownerLoc, args.args.size() == 1)) {
             result.main.errors.emplace_back(std::move(e));
         }
 
@@ -751,7 +752,7 @@ DispatchResult dispatchCallSymbol(const GlobalState &gs, DispatchArgs args,
                         tpe.type = hash->values[offset];
                         if (auto e = matchArgType(gs, *constr, core::Loc(args.locs.file, args.locs.call),
                                                   core::Loc(args.locs.file, args.locs.receiver), symbol, method, tpe,
-                                                  spec, args.selfType, targs, Loc::none())) {
+                                                  spec, args.selfType, targs, Loc::none(), args.locs.ownerLoc)) {
                             result.main.errors.emplace_back(std::move(e));
                         }
                     }
@@ -780,7 +781,7 @@ DispatchResult dispatchCallSymbol(const GlobalState &gs, DispatchArgs args,
                 tpe.type = hash->values[offset];
                 if (auto e = matchArgType(gs, *constr, core::Loc(args.locs.file, args.locs.call),
                                           core::Loc(args.locs.file, args.locs.receiver), symbol, method, tpe, spec,
-                                          args.selfType, targs, Loc::none())) {
+                                          args.selfType, targs, Loc::none(), args.locs.ownerLoc)) {
                     result.main.errors.emplace_back(std::move(e));
                 }
             }
@@ -804,7 +805,7 @@ DispatchResult dispatchCallSymbol(const GlobalState &gs, DispatchArgs args,
             if (auto e = gs.beginError(core::Loc(args.locs.file, args.locs.call), errors::Infer::UntypedSplat)) {
                 e.setHeader("Passing a hash where the specific keys are unknown to a method taking keyword arguments");
                 e.addErrorSection(ErrorSection("Got " + hashArgType->show(gs) + " originating from:",
-                                               hashArg->origins2Explanations(gs)));
+                                               hashArg->origins2Explanations(gs, args.locs.ownerLoc)));
                 result.main.errors.emplace_back(e.build());
             }
         }
@@ -1115,7 +1116,7 @@ public:
 
         if (auto e = gs.beginError(core::Loc(args.locs.file, args.locs.call), errors::Infer::RevealType)) {
             e.setHeader("Revealed type: `{}`", args.args[0]->type->showWithMoreInfo(gs));
-            e.addErrorSection(ErrorSection("From:", args.args[0]->origins2Explanations(gs)));
+            e.addErrorSection(ErrorSection("From:", args.args[0]->origins2Explanations(gs, args.locs.ownerLoc)));
         }
         res.returnType = args.args[0]->type;
     }
@@ -1308,7 +1309,7 @@ public:
         for (auto loc = args.locs.args.begin() + 1; loc != args.locs.args.end(); ++loc) {
             callLocsArgs.emplace_back(*loc);
         }
-        CallLocs callLocs{args.locs.file, args.locs.call, callLocsReceiver, callLocsArgs};
+        CallLocs callLocs{args.locs.file, args.locs.ownerLoc, args.locs.call, callLocsReceiver, callLocsArgs};
 
         auto dispatchArgsArgs = InlinedVector<const TypeAndOrigins *, 2>{};
         for (auto arg = args.args.begin() + 1; arg != args.args.end(); ++arg) {
@@ -1501,7 +1502,7 @@ public:
         InlinedVector<const TypeAndOrigins *, 2> sendArgs =
             Magic_callWithSplat::generateSendArgs(tuple, sendArgStore, core::Loc(args.locs.file, args.locs.args[2]));
         InlinedVector<LocOffsets, 2> sendArgLocs(tuple->elems.size(), args.locs.args[2]);
-        CallLocs sendLocs{args.locs.file, args.locs.call, args.locs.args[0], sendArgLocs};
+        CallLocs sendLocs{args.locs.file, args.locs.ownerLoc, args.locs.call, args.locs.args[0], sendArgLocs};
         DispatchArgs innerArgs{fn, sendLocs, sendArgs, receiver->type, receiver->type, args.block};
         auto dispatched = receiver->type->dispatchCall(gs, innerArgs);
         for (auto &err : dispatched.main.errors) {
@@ -1540,7 +1541,7 @@ private:
         NameRef to_proc = core::Names::toProc();
         InlinedVector<const TypeAndOrigins *, 2> sendArgs;
         InlinedVector<LocOffsets, 2> sendArgLocs;
-        CallLocs sendLocs{file, callLoc, receiverLoc, sendArgLocs};
+        CallLocs sendLocs{file, Loc::none(), callLoc, receiverLoc, sendArgLocs};
         DispatchArgs innerArgs{to_proc, sendLocs, sendArgs, nonNilBlockType, nonNilBlockType, nullptr};
         auto dispatched = nonNilBlockType->dispatchCall(gs, innerArgs);
         for (auto &err : dispatched.main.errors) {
@@ -1719,7 +1720,7 @@ public:
         for (auto &arg : sendArgStore) {
             sendArgs.emplace_back(&arg);
         }
-        CallLocs sendLocs{args.locs.file, args.locs.call, args.locs.args[0], sendArgLocs};
+        CallLocs sendLocs{args.locs.file, args.locs.ownerLoc, args.locs.call, args.locs.args[0], sendArgLocs};
 
         TypePtr finalBlockType =
             Magic_callWithBlock::typeToProc(gs, args.args[2]->type, args.locs.file, args.locs.call, args.locs.args[2]);
@@ -1787,7 +1788,7 @@ public:
         InlinedVector<const TypeAndOrigins *, 2> sendArgs =
             Magic_callWithSplat::generateSendArgs(tuple, sendArgStore, core::Loc(args.locs.file, args.locs.args[2]));
         InlinedVector<LocOffsets, 2> sendArgLocs(tuple->elems.size(), args.locs.args[2]);
-        CallLocs sendLocs{args.locs.file, args.locs.call, args.locs.args[0], sendArgLocs};
+        CallLocs sendLocs{args.locs.file, args.locs.ownerLoc, args.locs.call, args.locs.args[0], sendArgLocs};
 
         TypePtr finalBlockType =
             Magic_callWithBlock::typeToProc(gs, args.args[3]->type, args.locs.file, args.locs.call, args.locs.args[3]);
@@ -1845,7 +1846,7 @@ public:
             sendArgStore.emplace_back(args.args[i]);
             sendArgLocs.emplace_back(args.locs.args[i]);
         }
-        CallLocs sendLocs{args.locs.file, args.locs.call, args.locs.args[0], sendArgLocs};
+        CallLocs sendLocs{args.locs.file, Loc::none(), args.locs.call, args.locs.args[0], sendArgLocs};
 
         TypePtr returnTy;
         DispatchResult dispatched;
@@ -2215,10 +2216,7 @@ public:
         auto hash = make_type<ClassType>(core::Symbols::Sorbet_Private_Static().data(gs)->lookupSingletonClass(gs));
         InlinedVector<LocOffsets, 2> argLocs{args.locs.receiver};
         CallLocs locs{
-            args.locs.file,
-            args.locs.call,
-            args.locs.call,
-            argLocs,
+            args.locs.file, args.locs.ownerLoc, args.locs.call, args.locs.call, argLocs,
         };
         TypeAndOrigins myType{args.selfType, {core::Loc(args.locs.file, args.locs.receiver)}};
         InlinedVector<const TypeAndOrigins *, 2> innerArgs{&myType};

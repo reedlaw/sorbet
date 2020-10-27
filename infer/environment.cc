@@ -946,10 +946,7 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                     checkFullyDefined = false;
                 }
                 core::CallLocs locs{
-                    ctx.file,
-                    bind.loc,
-                    send->receiverLoc,
-                    send->argLocs,
+                    ctx.file, ownerLoc, bind.loc, send->receiverLoc, send->argLocs,
                 };
                 core::DispatchArgs dispatchArgs{send->fun, locs, args, recvType.type, recvType.type, send->link};
                 auto dispatched = recvType.type->dispatchCall(ctx, dispatchArgs);
@@ -1156,7 +1153,7 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                             }));
                         e.addErrorSection(
                             core::ErrorSection("Got " + typeAndOrigin.type->show(ctx) + " originating from:",
-                                               typeAndOrigin.origins2Explanations(ctx)));
+                                               typeAndOrigin.origins2Explanations(ctx, ownerLoc)));
                     }
                 }
             },
@@ -1188,7 +1185,7 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                         e.addErrorSection(core::ErrorSection("Expected " + expectedType->show(ctx)));
                         e.addErrorSection(
                             core::ErrorSection("Got " + typeAndOrigin.type->show(ctx) + " originating from:",
-                                               typeAndOrigin.origins2Explanations(ctx)));
+                                               typeAndOrigin.origins2Explanations(ctx, ownerLoc)));
                     }
                 }
 
@@ -1214,7 +1211,8 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                         e.setHeader("Control flow could reach `{}` because the type `{}` wasn't handled", "T.absurd",
                                     typeAndOrigin.type->show(ctx));
                     }
-                    e.addErrorSection(core::ErrorSection("Originating from:", typeAndOrigin.origins2Explanations(ctx)));
+                    e.addErrorSection(
+                        core::ErrorSection("Originating from:", typeAndOrigin.origins2Explanations(ctx, ownerLoc)));
                 }
 
                 tp.type = core::Types::bottom();
@@ -1253,14 +1251,14 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                         if (auto e = ctx.beginError(bind.loc, core::errors::Infer::CastTypeMismatch)) {
                             e.setHeader("The typechecker was unable to infer the type of the asserted value");
                             e.addErrorSection(core::ErrorSection("Got " + ty.type->show(ctx) + " originating from:",
-                                                                 ty.origins2Explanations(ctx)));
+                                                                 ty.origins2Explanations(ctx, ownerLoc)));
                             e.addErrorSection(core::ErrorSection("You may need to add additional `sig` annotations"));
                         }
                     } else if (!core::Types::isSubType(ctx, ty.type, castType)) {
                         if (auto e = ctx.beginError(bind.loc, core::errors::Infer::CastTypeMismatch)) {
                             e.setHeader("Argument does not have asserted type `{}`", castType->show(ctx));
                             e.addErrorSection(core::ErrorSection("Got " + ty.type->show(ctx) + " originating from:",
-                                                                 ty.origins2Explanations(ctx)));
+                                                                 ty.origins2Explanations(ctx, ownerLoc)));
                         }
                     }
                 } else if (!c->isSynthetic) {
@@ -1369,8 +1367,8 @@ core::TypePtr Environment::processBinding(core::Context ctx, const cfg::CFG &inW
                                     e.replaceWith(fmt::format("Initialize as `{}`", suggest->show(ctx)), cur.origins[0],
                                                   "T.let({}, {})", cur.origins[0].source(ctx), suggest->show(ctx));
                                 } else {
-                                    e.addErrorSection(
-                                        core::ErrorSection("Original type from:", cur.origins2Explanations(ctx)));
+                                    e.addErrorSection(core::ErrorSection("Original type from:",
+                                                                         cur.origins2Explanations(ctx, ownerLoc)));
                                 }
                             }
 
@@ -1448,7 +1446,7 @@ core::TypeAndOrigins nilTypesWithOriginWithLoc(core::Loc loc) {
 }
 } // namespace
 
-Environment::Environment(core::Loc ownerLoc) : uninitialized(nilTypesWithOriginWithLoc(ownerLoc)) {}
+Environment::Environment(core::Loc ownerLoc) : uninitialized(nilTypesWithOriginWithLoc(ownerLoc)), ownerLoc(ownerLoc) {}
 
 TestedKnowledge TestedKnowledge::empty;
 } // namespace sorbet::infer
