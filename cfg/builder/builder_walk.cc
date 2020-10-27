@@ -126,8 +126,8 @@ BasicBlock *CFGBuilder::walkHash(CFGContext cctx, ast::Hash *h, BasicBlock *curr
         current = walk(cctx.withTarget(valTmp), h->values[i], current);
         vars.emplace_back(keyTmp);
         vars.emplace_back(valTmp);
-        locs.emplace_back(h->keys[i]->loc);
-        locs.emplace_back(h->values[i]->loc);
+        locs.emplace_back(h->keys[i].loc());
+        locs.emplace_back(h->values[i].loc());
     }
     LocalRef magic = cctx.newTemporary(core::Names::magic());
     synthesizeExpr(current, magic, core::LocOffsets::none(), make_unique<Alias>(core::Symbols::Magic()));
@@ -148,7 +148,7 @@ tuple<LocalRef, BasicBlock *, BasicBlock *> CFGBuilder::walkDefault(CFGContext c
                                                                     const core::ArgInfo &argInfo, LocalRef argLocal,
                                                                     core::LocOffsets argLoc, ast::TreePtr &def,
                                                                     BasicBlock *presentCont, BasicBlock *defaultCont) {
-    auto defLoc = def->loc;
+    auto defLoc = def.loc();
 
     auto *presentNext = cctx.inWhat.freshBlock(cctx.loops, presentCont->rubyBlockId);
     auto *defaultNext = cctx.inWhat.freshBlock(cctx.loops, presentCont->rubyBlockId);
@@ -203,7 +203,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                 auto headerEnd =
                     walk(cctx.withTarget(condSym).withLoopScope(headerBlock, continueBlock), a->cond, headerBlock);
                 auto bodyBlock = cctx.inWhat.freshBlock(cctx.loops + 1, current->rubyBlockId);
-                conditionalJump(headerEnd, condSym, bodyBlock, breakNotCalledBlock, cctx.inWhat, a->cond->loc);
+                conditionalJump(headerEnd, condSym, bodyBlock, breakNotCalledBlock, cctx.inWhat, a->cond.loc());
                 // finishHeader
                 LocalRef bodySym = cctx.newTemporary(core::Names::statTemp());
 
@@ -250,7 +250,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                 auto cont = walk(cctx.withTarget(ifSym), a->cond, current);
                 auto thenBlock = cctx.inWhat.freshBlock(cctx.loops, current->rubyBlockId);
                 auto elseBlock = cctx.inWhat.freshBlock(cctx.loops, current->rubyBlockId);
-                conditionalJump(cont, ifSym, thenBlock, elseBlock, cctx.inWhat, a->cond->loc);
+                conditionalJump(cont, ifSym, thenBlock, elseBlock, cctx.inWhat, a->cond.loc());
 
                 auto thenEnd = walk(cctx, a->thenp, thenBlock);
                 auto elseEnd = walk(cctx, a->elsep, elseBlock);
@@ -387,7 +387,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                     }
 
                     args.emplace_back(temp);
-                    argLocs.emplace_back(exp->loc);
+                    argLocs.emplace_back(exp.loc());
                 }
 
                 if (s->block != nullptr) {
@@ -404,7 +404,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                     }
                     auto link = make_shared<core::SendAndBlockLink>(s->fun, move(argFlags), newRubyBlockId);
                     auto send =
-                        make_unique<Send>(recv, s->fun, s->recv->loc, args, argLocs, !!s->flags.isPrivateOk, link);
+                        make_unique<Send>(recv, s->fun, s->recv.loc(), args, argLocs, !!s->flags.isPrivateOk, link);
                     LocalRef sendTemp = cctx.newTemporary(core::Names::blockPreCallTemp());
                     auto solveConstraint = make_unique<SolveConstraint>(link, sendTemp);
                     current->exprs.emplace_back(sendTemp, s->loc, move(send));
@@ -423,7 +423,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                     LocalRef idxTmp = cctx.newTemporary(core::Names::blkArg());
                     bodyBlock->exprs.emplace_back(LocalRef::selfVariable(), s->loc,
                                                   make_unique<LoadSelf>(link, LocalRef::selfVariable()));
-                    bodyBlock->exprs.emplace_back(argTemp, s->block->loc, make_unique<LoadYieldParams>(link));
+                    bodyBlock->exprs.emplace_back(argTemp, s->block.loc(), make_unique<LoadYieldParams>(link));
 
                     for (int i = 0; i < blockArgs.size(); ++i) {
                         auto &arg = blockArgs[i];
@@ -452,7 +452,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                         auto isPrivateOk = false;
                         bodyBlock->exprs.emplace_back(argLoc, arg.loc,
                                                       make_unique<Send>(argTemp, core::Names::squareBrackets(),
-                                                                        s->block->loc, idxVec, locs, isPrivateOk));
+                                                                        s->block.loc(), idxVec, locs, isPrivateOk));
                     }
 
                     conditionalJump(headerBlock, LocalRef::blockCall(), bodyBlock, solveConstraintBlock, cctx.inWhat,
@@ -468,7 +468,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                                           ast::cast_tree<ast::Block>(s->block)->body, bodyBlock);
                     if (blockLast != cctx.inWhat.deadBlock()) {
                         LocalRef dead = cctx.newTemporary(core::Names::blockReturnTemp());
-                        synthesizeExpr(blockLast, dead, s->block->loc, make_unique<BlockReturn>(link, blockrv));
+                        synthesizeExpr(blockLast, dead, s->block.loc(), make_unique<BlockReturn>(link, blockrv));
                     }
 
                     unconditionalJump(blockLast, headerBlock, cctx.inWhat, s->loc);
@@ -500,7 +500,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                 } else {
                     current->exprs.emplace_back(
                         cctx.target, s->loc,
-                        make_unique<Send>(recv, s->fun, s->recv->loc, args, argLocs, !!s->flags.isPrivateOk));
+                        make_unique<Send>(recv, s->fun, s->recv.loc(), args, argLocs, !!s->flags.isPrivateOk));
                 }
 
                 ret = current;
@@ -591,7 +591,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                     auto isPrivateOk = false;
                     synthesizeExpr(
                         current, retryTemp, core::LocOffsets::none(),
-                        make_unique<Send>(magic, core::Names::retry(), what->loc, args, argLocs, isPrivateOk));
+                        make_unique<Send>(magic, core::Names::retry(), what.loc(), args, argLocs, isPrivateOk));
                     unconditionalJump(current, cctx.rescueScope, cctx.inWhat, a->loc);
                 }
                 ret = cctx.inWhat.deadBlock();
@@ -619,7 +619,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                 auto rescueHandlersBlock = cctx.inWhat.freshBlock(cctx.loops, handlersRubyBlockId);
                 auto bodyBlock = cctx.inWhat.freshBlock(cctx.loops, bodyRubyBlockId);
                 auto exceptionValue = cctx.newTemporary(core::Names::exceptionValue());
-                synthesizeExpr(rescueHeaderBlock, exceptionValue, what->loc, make_unique<GetCurrentException>());
+                synthesizeExpr(rescueHeaderBlock, exceptionValue, what.loc(), make_unique<GetCurrentException>());
                 conditionalJump(rescueHeaderBlock, exceptionValue, rescueHandlersBlock, bodyBlock, cctx.inWhat, a->loc);
 
                 // cctx.loops += 1; // should formally be here but this makes us report a lot of false errors
@@ -627,7 +627,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
 
                 // else is only executed if body didn't raise an exception
                 auto elseBody = cctx.inWhat.freshBlock(cctx.loops, elseRubyBlockId);
-                synthesizeExpr(bodyBlock, exceptionValue, what->loc, make_unique<GetCurrentException>());
+                synthesizeExpr(bodyBlock, exceptionValue, what.loc(), make_unique<GetCurrentException>());
                 conditionalJump(bodyBlock, exceptionValue, rescueHandlersBlock, elseBody, cctx.inWhat, a->loc);
 
                 elseBody = walk(cctx, a->else_, elseBody);
@@ -646,7 +646,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                     ENFORCE(local != nullptr, "rescue case var not a local?");
 
                     auto localVar = cctx.inWhat.enterLocal(local->localVariable);
-                    rescueHandlersBlock->exprs.emplace_back(localVar, rescueCase->var->loc,
+                    rescueHandlersBlock->exprs.emplace_back(localVar, rescueCase->var.loc(),
                                                             make_unique<Ident>(exceptionValue));
 
                     // Mark the exception as handled
@@ -656,7 +656,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                     auto res = cctx.newTemporary(core::Names::keepForCfgTemp());
                     auto isPrivateOk = false;
                     auto args = {exceptionValue};
-                    auto argLocs = {what->loc};
+                    auto argLocs = {what.loc()};
                     synthesizeExpr(caseBody, res, rescueCase->loc,
                                    make_unique<Send>(magic, core::Names::keepForCfg(), rescueCase->loc, args, argLocs,
                                                      isPrivateOk));
@@ -664,11 +664,11 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
                     if (exceptions.empty()) {
                         // rescue without a class catches StandardError
                         exceptions.emplace_back(
-                            ast::MK::Constant(rescueCase->var->loc, core::Symbols::StandardError()));
+                            ast::MK::Constant(rescueCase->var.loc(), core::Symbols::StandardError()));
                         added = true;
                     }
                     for (auto &ex : exceptions) {
-                        auto loc = ex->loc;
+                        auto loc = ex.loc();
                         auto exceptionClass = cctx.newTemporary(core::Names::exceptionClassTemp());
                         rescueHandlersBlock = walk(cctx.withTarget(exceptionClass), ex, rescueHandlersBlock);
 
@@ -756,7 +756,7 @@ BasicBlock *CFGBuilder::walk(CFGContext cctx, const ast::TreePtr &what, BasicBlo
         return ret;
     } catch (SorbetException &) {
         Exception::failInFuzzer();
-        if (auto e = cctx.ctx.beginError(what->loc, core::errors::Internal::InternalError)) {
+        if (auto e = cctx.ctx.beginError(what.loc(), core::errors::Internal::InternalError)) {
             e.setHeader("Failed to convert tree to CFG (backtrace is above )");
         }
         throw;

@@ -21,7 +21,7 @@ void CorrectTypeAlias::eagerToLazy(core::Context ctx, core::ErrorBuilder &e, ast
     if (send->args.size() != 1) {
         return;
     }
-    auto *arg = send->args[0].get();
+    auto &arg = send->args[0];
     auto *hash = ast::cast_tree<ast::Hash>(send->args[0]);
     // Insert extra {}'s when a hash literal does not have them.
     // Example: `T.type_alias(a: Integer,  b: String)`
@@ -30,16 +30,16 @@ void CorrectTypeAlias::eagerToLazy(core::Context ctx, core::ErrorBuilder &e, ast
     if (start.line == end.line) {
         if (wrapHash) {
             e.replaceWith("Convert to lazy type alias", core::Loc(ctx.file, send->loc), "T.type_alias {{{{{}}}}}",
-                          core::Loc(ctx.file, arg->loc).source(ctx));
+                          core::Loc(ctx.file, arg.loc()).source(ctx));
         } else {
             e.replaceWith("Convert to lazy type alias", core::Loc(ctx.file, send->loc), "T.type_alias {{{}}}",
-                          core::Loc(ctx.file, arg->loc).source(ctx));
+                          core::Loc(ctx.file, arg.loc()).source(ctx));
         }
     } else {
-        auto loc = core::Loc(ctx.file, arg->loc);
+        auto loc = core::Loc(ctx.file, arg.loc());
         core::Loc endLoc(loc.file(), loc.endPos(), loc.endPos());
         string argIndent = getIndent(ctx, endLoc);
-        string argSrc = fmt::format("{}{}", argIndent, core::Loc(ctx.file, arg->loc).source(ctx));
+        string argSrc = fmt::format("{}{}", argIndent, core::Loc(ctx.file, arg.loc()).source(ctx));
         if (wrapHash) {
             argSrc = fmt::format("{}{{\n{}\n{}}}", argIndent, indented(argSrc), argIndent);
         }
